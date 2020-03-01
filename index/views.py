@@ -20,9 +20,9 @@ def index(request):
             category=0
 
         if int(category) == 0:
-            art = article.objects.all().order_by('-createTime')
+            art = article.objects.filter(is_show=1).all().order_by('-createTime')
         else:
-            art = article.objects.filter(category=category).order_by('-createTime')
+            art = article.objects.filter(category=category).filter(is_show=1).order_by('-createTime')
 
         # 分页显示，把stus 的数据按照3个一页显示
         paginator = Paginator(art, 20)
@@ -103,7 +103,7 @@ def postAdd(request):
         if not content:
             return JsonResponse({'code':201,'msg':'内容不能为空'})
         
-        article.objects.create(category=category,title=title,content=content,uid=request.user)
+        article.objects.create(category=category,title=title,content=content,uid=request.user,is_show=1)
         #发布文章增加5个积分
         addJiFen(request,5)
 
