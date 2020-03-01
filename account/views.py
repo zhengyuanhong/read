@@ -260,11 +260,12 @@ def uploadImage(request):
         if ext not in ['jpg', 'png', 'gif']:
             return JsonResponse({'code': 201, 'msg': '不是我要的格式'})
 
-        filepath = os.path.join(settings.MEDIA_ROOT,'media/avatar', myfile.name)
+        filepath = os.path.join(settings.MEDIA_ROOT,'avatars',myfile.name)
         f = open(filepath, 'wb')
         for i in myfile.chunks():
             f.write(i)
         f.close()
+
         # 图片命名
         timename = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())
         savename = "{}:{}:{}.{}".format(
