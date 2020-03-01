@@ -24,7 +24,7 @@ def index(request):
         else:
             art = article.objects.filter(category=category).order_by('-createTime')
 
-        # 分页显示，把stus 的数据按照3个一页显示
+        # 分页显示，把status 的数据按照3个一页显示
         paginator = Paginator(art, 20)
         # 获取第一页的内容
         page = paginator.page(page_id)
