@@ -6,4 +6,4 @@ uwsgi.ini
 index/__pycache__
 index/migrations
 account/__pycache__
-account/migration
+account/migrations
