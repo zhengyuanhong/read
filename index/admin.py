@@ -12,7 +12,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(article)
 class articleAdmin(admin.ModelAdmin):
-    list_display=('id','title','uid','content','updateTime','createTime')
+    list_display=('id','title','uid','content','is_show','updateTime','createTime')
     
 #修改网页title和站点header。
 admin.site.site_title = "X社区后台管理"
