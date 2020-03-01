@@ -1,9 +1,10 @@
 from qiniu import Auth, put_file, etag,config
+from django.conf import settings
 
 def uploadQiniu(pathname,savename):
     #需要填写你的 Access Key 和 Secret Key
-    access_key = 'jmiM2zVKT9DmRh2hCI4MYseYGYziHwRPab3OordF'
-    secret_key = 'KFk_xsW02aBZTC_c-kNfhCi2pRTo3dNG-jne3KDX'
+    access_key = settings.ACCESS_KEY 
+    secret_key = settings.SECRET_KEY
     #构建鉴权对象
     q = Auth(access_key, secret_key)
     #要上传的空间
