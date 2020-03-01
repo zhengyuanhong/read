@@ -7,5 +7,5 @@ index/__pycache__
 index/migrations
 account/__pycache__
 account/migrations
-mdeia/*
-mdeia/avatars/*
+mdeia/
+mdeia/avatars/
