@@ -1,0 +1,46 @@
+{% extends 'layout/base.html' %}
+
+{% block left_content %}
+
+<div class="layui-container" style="margin-top: 20px;">
+  
+  <div class="fly-panel fly-panel-user" pad20>
+	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
+	    <a href="/account/del_msg" class="layui-btn layui-btn-primary" id="LAY_delallmsg">清空全部消息</a>
+	    <div  id="LAY_minemsg" style="margin-top: 10px;">
+        <!--<div class="fly-none">您暂时没有最新消息</div>-->
+        <ul id='message' class="mine-msg">
+
+        </ul>
+      </div>
+	  </div>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  layui.use(['jquery'], function () {
+    var $ = layui.jquery
+    $.ajax({
+      url: '/account/msg',
+      method: 'get',
+      dataType: 'JSON',
+      success: function (res) {
+        if (res.code == 200) {
+          if(res.data.length>0){
+            $.each(res.data,function(index,value){
+            var str = '<li data-id="123">'+value.time  +'  文章<a href="/detail/'+value.article_id+'?type=message" target="_blank"><cite>'+value.title+'</cite></a>新增一条回复    <a style="color:red;" href="del_msg?id='+value.id+'">删除</a></li>'
+             $('#message').append(str) 
+            })
+          }else{
+            $('#message').append('<div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>暂无消息</span></div>')
+          }
+        }
+      }
+    });
+  });
+
+</script>
+{% endblock %}

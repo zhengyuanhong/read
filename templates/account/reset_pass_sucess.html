@@ -1,0 +1,15 @@
+{% extends 'layout/base.html' %}
+
+{% block right_content%}
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <h2>{{message}}</h2>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+        <article>
+          <text>{{res|default:'重置失败，请重新操作'}}</text>
+        </article>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

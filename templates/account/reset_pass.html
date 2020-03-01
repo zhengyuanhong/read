@@ -1,0 +1,33 @@
+{% extends 'layout/base.html' %}
+
+{% block right_content%}
+<div class="layui-container fly-marginTop">
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+            <h2>{{message|default:'重置密码'}}</h2>
+            <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                {% if flag %}
+                <div class="layui-form layui-form-pane">
+                    <form action="forget" method="post">
+                        {% csrf_token %}
+                        <div class="layui-form-item">
+                            <label for="L_email" class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="L_email" name="email" required lay-verify="email"
+                                    class="layui-input">
+                            </div>
+                            <button class="layui-btn" key="set-mine" lay-filter="verif" lay-submit>提交</button>
+                        </div>
+                        <div style="color: red;">{{tip|default:'该邮箱未注册'}}</div>
+                        <!-- 邮箱过期，输入邮箱重新验证 -->
+                    </form>
+                </div>
+                {% else %}
+                <article>
+                    <div style="color: red;">{{tip|default:'已发送到您的邮箱，请注意查收'}}</div>
+                </article>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}

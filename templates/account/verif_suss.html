@@ -1,0 +1,16 @@
+{% extends 'layout/base.html' %}
+
+{% block right_content%}
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <h2>{{message}}</h2>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+        <article>
+          <p><a style="text-decoration: underline;" href="login">{{tip}}</a></p>
+        </article>
+        <!-- 验证成功，快去登陆 -->
+      </div>
+    </div>
+  </div>
+  {% endblock %}

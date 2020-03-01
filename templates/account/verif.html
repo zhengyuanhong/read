@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+
+{% block right_content%}
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <h2>邮箱提醒</h2>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+
+        <article>
+
+          <p>欢迎来到 「X社区」</p>
+          <br>
+          <p>我们给您的邮箱发送了验证邮件，
+
+            <a href="http://mail.qq.com" style="text-decoration: underline;" target="_blank">点击这里进入您的邮箱进行验证</a>,
+
+            请按邮件中的提示，在 24 小时之内完成验证，谢谢啦^_^。<br /><br />
+            友情提示：只有激活邮件后才拥有最全的功能哦，赶快去激活吧^_^!
+            <br />
+            (邮件可能会被误判成垃圾邮件，若收件箱内没有收到，请在邮箱里的其他目录寻找激活邮件。)</p>
+
+        </article>
+
+      </div>
+    </div>
+  </div>
+  {% endblock %}

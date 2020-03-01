@@ -1,0 +1,61 @@
+{% extends 'layout/base.html' %}
+
+{% block right_content%}
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <h2>{{message|default:'邮箱验证'}}</h2>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+        <div class="layui-form layui-form-pane">
+          <form>
+            {% csrf_token %}
+            <div class="layui-form-item">
+              <label for="L_email" class="layui-form-label">邮箱</label>
+              <div class="layui-input-inline">
+                <input type="text" id="L_email" name="email" required lay-verify="email" class="layui-input">
+              </div>
+              <button class="layui-btn" key="set-mine" lay-filter="verif" lay-submit>邮箱验证</button>
+            </div>
+            <div id='#tip'>{{tip|default:'请输入注册时的邮箱'}}</div>
+            <!-- 邮箱过期，输入邮箱重新验证 -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block script %}
+
+  <script>
+    layui.use(['form', 'jquery'], function () {
+      var form = layui.form,
+        $ = layui.jquery
+
+      form.on('submit(verif)', function (data) {
+        $.ajax({
+          url: 'verif',
+          method: 'post',
+          data: data.field,
+          dataType: 'JSON',
+          success: function (res) {
+            if (res.code == 200) {
+              layer.msg(res.msg);
+              setTimeout(function () {
+                window.location.href = "email_tip"
+              }, 100)
+            } else if (res.code == 203) {
+              layer.msg(res.msg);
+              setTimeout(function () {
+                window.location.href = "login"
+              }, 1000)
+            } else {
+              layer.msg(res.msg);
+            }
+          }
+        });
+        return false
+      });
+    });
+  </script>
+  {% endblock %}

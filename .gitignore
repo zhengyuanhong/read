@@ -1,0 +1,5 @@
+uwsgi
+readDjango/settings.py
+.idea
+requestments.txt
+uwsgi.ini

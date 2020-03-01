@@ -1,0 +1,61 @@
+{% load static %}
+<div class="fly-header layui-bg-green" style="border-bottom-color: white;">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <!-- <img src="{% static 'index/images/logo.png' %}" alt="layui"> -->
+      <text style="color:white;line-height:35px;font-weight: bolder;font-size: 20px;">X社区</text>
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <!-- {% if request.user.is_authenticated %}
+      <li id='nav_url' class="layui-nav-item">
+        <a href="{% url 'postAdd' %}" target="_blank">发帖</a>
+      </li>
+      {% endif %} -->
+    </ul>
+
+    <ul class="layui-nav fly-nav-user">
+
+      {% if not request.user.is_authenticated %}
+      <!-- 未登入的状态 -->
+      <li class="layui-nav-item">
+        <a class="iconfont icon-touxiang layui-hide-xs" href="{% url 'accountLogin' %}"></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="{% url 'accountLogin' %}">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="{% url 'accountRegister' %}">注册</a>
+      </li>
+      {%else%}
+      <li class="layui-nav-item">
+        <a href="{% url 'postAdd' %}">发布文章</a>
+      </li>   
+      <li class="layui-nav-item">
+        <a href="{% url 'getMessage' %}">我的消息
+          {% if request.is_notify %}
+          <span class="layui-badge-dot"></span>
+          {% endif %}
+        </a>
+      </li>
+      <!-- 登入后的状态 -->
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">{{request.user.username}}</cite>
+          <!-- <i class="layui-badge fly-badge-vip layui-hide-xs">{{request.user.level}}</i> -->
+          <img src="{{request.user.avatar}}">
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="{% url 'accountUser' userId=request.user.id %}"><i class="layui-icon"
+                style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <dd><a href="{% url 'accountSet' %}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+          {% if request.user.is_superuser %}
+          <dd><a href="/read_admin"><i class="layui-icon">&#xe620;</i>后台管理</a></dd>
+          {% endif %}
+          <hr style="margin: 5px 0;">
+          <dd><a href="{% url 'accountLoginOut' %}" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+      {%endif%}
+    </ul>
+  </div>
+</div>

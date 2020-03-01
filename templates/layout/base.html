@@ -1,0 +1,29 @@
+ 
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  {% include 'layout/header.html' %}
+  <!-- 导航 -->
+  {% include 'layout/nav.html' %}
+
+    <!-- 用户信息 -->
+    {% block userInfo %}
+    {% endblock %}
+    <!-- 右边内容 -->
+    {% block right_content%}
+    {% endblock %}
+    <!-- 左边内容 -->
+    {% block left_content %}
+    {% endblock %}
+
+{% include 'layout/footer.html' %}
+
+
+{% include 'layout/script.html' %}
+
+{% block script %}
+{% endblock %}
+
+</body>
+</html>
