@@ -14,9 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path,include,re_path
 from index.views import index,getUserRank,detail,postAdd,uploadImage,postReply,editArticle,deleteArticle,index_page_not_found
 import account
+from django.views.static import serve
+from django.conf import settings 
 
 urlpatterns = [
     path('read_admin/', admin.site.urls),
@@ -29,6 +31,7 @@ urlpatterns = [
     path('upload',uploadImage,name='uploadImage'),
     path('account/',include('account.urls')),
     path('rank',getUserRank),
+    re_path(r'^media/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT})
 ]
 
 handler404 = account.views.page_not_found 
