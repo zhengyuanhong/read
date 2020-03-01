@@ -3,3 +3,7 @@ readDjango/settings.py
 .idea
 requestments.txt
 uwsgi.ini
+index/__pycache__
+index/migrations
+account/__pycache__
+account/migration
