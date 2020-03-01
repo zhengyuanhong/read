@@ -20,9 +20,9 @@ def index(request):
             category=0
 
         if int(category) == 0:
-            art = article.objects.all().order_by('-createTime')
+            art = article.objects.filter(is_show=True).all().order_by('-createTime')
         else:
-            art = article.objects.filter(category=category).order_by('-createTime')
+            art = article.objects.filter(category=category).filter(is_show=True).all().order_by('-createTime')
 
         # 分页显示，把status 的数据按照3个一页显示
         paginator = Paginator(art, 20)
@@ -64,6 +64,10 @@ def index(request):
 def detail(request,article_id):
     types = request.GET.get('type')
     detail = article.objects.filter(id=article_id).first() #获取文章详情
+    
+    if not detail.is_show:
+        return render(request,'404.html')
+
     comment =  comments.objects.filter(aid=detail)
     comm_num = comment.count() #获取评论条数
     author = detail.uid #获取作者信息

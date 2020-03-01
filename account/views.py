@@ -41,7 +41,7 @@ def accountUserComment(request):
 
 def accountUserArticle(request):
     if request.method == 'GET':
-        userArticle = article.objects.filter(uid=request.GET.get('userid')).all().order_by('-createTime')
+        userArticle = article.objects.filter(uid=request.GET.get('userid')).filter(is_show=True).all().order_by('-createTime')
 
         data=[]    
         for u in userArticle:
