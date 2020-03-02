@@ -109,7 +109,7 @@ def postAdd(request):
         
         article.objects.create(category=category,title=title,content=content,uid=request.user)
         #发布文章增加5个积分
-        addJiFen(request,5)
+        addJiFen(request,settings.ADD_JIFEN) 
 
         return JsonResponse({'code':200,'msg':'发布成功'})   
 
@@ -151,7 +151,7 @@ def deleteArticle(request):
     if request.method == 'GET':
         article_id = request.GET.get('id')
         #扣除积分
-        res = reduceJiFen(request,20)
+        res = reduceJiFen(request,settings.REDUCE_JIFEN)
         if not res:
             return JsonResponse({'code':201,'msg':'财富不够'})
 
