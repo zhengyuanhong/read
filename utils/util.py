@@ -72,7 +72,7 @@ def random_str(randomlength=4):
 
 # 发送重置密码邮箱
 def sendResetPassUrl(token,email,username):
-    subject = 'X社区（重置密码）'
+    subject = settings.WEB_NAME+'（重置密码）'
     message = '' 
     url = '{}/account/reset_password?token={}'.format(settings.HOST_URL, token)
     msg_template = '''
@@ -82,25 +82,24 @@ def sendResetPassUrl(token,email,username):
         <br>
         <a href="{url}" >点击重置密码</a>
         '''
-    msg_template = msg_template.format(username=username,expires=settings.EXPIRE_TOKEN_TIME/3600,url=url)
+    msg_template = msg_template.format(username=username,expires=int(settings.EXPIRE_TOKEN_TIME/3600),url=url)
     sendMail(subject, message, [email],html_message=msg_template)
 
 # 发送验证账号邮箱
 def sendVerif(verif_code, email):
     try:
-        subject = '欢迎注册X社区'
+        subject = '欢迎注册'+settings.WEB_NAME
 
         url = '{}/account/verif?token={}'.format(settings.HOST_URL, verif_code)
         message = ''
 
         msg_template = '''
-        欢迎注册X社区 
         有效期：{expires}小时
         <a href="{url}" >点击链接激活</a>
         '''
 
         html_message = msg_template.format(
-            expires=settings.EXPIRE_TOKEN_TIME/3600, url=url)
+            expires=int(settings.EXPIRE_TOKEN_TIME/3600), url=url)
         email_list = [email]
         sendMail(subject, message, email_list, html_message=html_message)
     except Exception:
