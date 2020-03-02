@@ -49,7 +49,7 @@
                 style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <dd><a href="{% url 'accountSet' %}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           {% if request.user.is_superuser %}
-          <dd><a href="/read_admin"><i class="layui-icon">&#xe620;</i>后台管理</a></dd>
+          <dd><a href="/read_admin"><i class="layui-icon">&#xe653;</i>后台管理</a></dd>
           {% endif %}
           <hr style="margin: 5px 0;">
           <dd><a href="{% url 'accountLoginOut' %}" style="text-align: center;">退出</a></dd>
