@@ -168,7 +168,7 @@ def postReply(request):
         
         userinfo = siteUser.objects.filter(username=contentlist[0][1:]).first()
         if userinfo:
-            content = '<a href="/account/u/{userid}">@{username}</a> {content}'.format(userid=userinfo.id,username=userinfo.username,content=contentlist[len(contentlist)-1])
+            content = '<a href="/account/u/{userid}">@{username}</a> {content}'.format(userid=userinfo.id,username=userinfo.username,content=contentlist[1:][0])
         
         comments.objects.create(aid_id=aid,comm_uid_id=request.user.id,comm_content=content)
 
