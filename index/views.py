@@ -45,6 +45,7 @@ def index(request):
             temp['createTime'] = formateTime(
                 str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
             temp['comm_num'] = i.article.count()
+            temp['is_top'] = i.is_top
             data.append(temp)
 
         # 最近注册

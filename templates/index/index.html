@@ -38,6 +38,9 @@
               <img src="{{i.user.avatar}}" alt="贤心">
             </a>
             <h2>
+              {% if i.is_top > 0 %}
+              <a class="layui-badge">置顶</a>
+              {% endif %}
               <a href="/detail/{{i.id}}">
                 {{i.title}}
               </a>
