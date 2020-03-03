@@ -13,8 +13,9 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(article)
 class articleAdmin(admin.ModelAdmin):
-    list_display=('id','title','uid','content','is_show','updateTime','createTime')
+    list_display=('id','title','uid','content','is_top','is_show','updateTime','createTime')
     list_display_links = ('title','content')
+    list_editable = ('is_top',)
 #修改网页title和站点header。
 admin.site.site_title = settings.WEB_NAME+"后台管理"
 admin.site.site_header = settings.WEB_NAME
