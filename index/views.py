@@ -25,10 +25,10 @@ def index(request):
 
         if int(category) == 0:
             art = article.objects.filter(
-                is_show=True).all().order_by('-createTime')
+                is_show=True).all().order_by('-is_top','-createTime')
         else:
             art = article.objects.filter(category=category).filter(
-                is_show=True).all().order_by('-createTime')
+                is_show=True).all().order_by('-is_top','-createTime')
 
         # 分页显示，把status 的数据按照3个一页显示
         paginator = Paginator(art, 20)

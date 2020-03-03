@@ -9,6 +9,7 @@ class article(models.Model):
     uid = models.ForeignKey(settings.AUTH_USER_MODEL,
                             on_delete=models.CASCADE, related_name='user')
     is_show = models.BooleanField('是否显示',default=True)
+    is_top = models.IntegerField('优先级',default=0)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 
