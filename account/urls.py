@@ -1,5 +1,8 @@
 from django.urls import path
-from account.views import accountUserArticle,getMsg,delMsg,accountUserComment,accountUser,accountLogin,verifEmail,emailTip,accountSet,setPassword,accountLoginOut,accountRegister,setInfo,uploadImage,verif,getMessage,sendResetPassword,resetPassword
+from account.views import accountUserArticle,getMsg,delMsg, \
+    accountUserComment,accountUser,accountLogin,verifEmail, \
+    emailTip,accountSet,setPassword,accountLoginOut,accountRegister, \
+    setInfo,uploadImage,verif,getMessage,sendResetPassword,resetPassword
 
 urlpatterns = [
     path('u/<int:userId>',accountUser,name='accountUser'),
