@@ -107,7 +107,7 @@ def postAdd(request):
     if request.method == 'GET':
         # 如果积分少于15，就不能发布文章
         if request.user.jifen <= settings.QUAN_XIAN:
-            return render(request, 'refuse_write.html',{'tip':'你的财富值不够发表文章，多<a href="{{request.web.host}}" target="_blank"> 去评论 </a>其他文章可能有惊喜哟'})
+            return render(request, 'refuse_write.html',{'tip':'你的财富值不够发表文章，去评论其他文章可获得更多财富'})
 
         now = datetime.datetime.now() 
         count = article.objects.filter(uid=request.user).filter(createTime__year=now.year,createTime__month=now.month,createTime__day=now.day).count()
