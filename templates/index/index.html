@@ -12,27 +12,11 @@
       <div class="fly-panel" style="margin-bottom: 0;">
 
         <div class="fly-panel-title fly-filter">
-          {% if category_id == 0 %}
-          <a href="?category=0" class='layui-this'>综合</a>
-          <span class="fly-mid"></span>
-          {% else %}
-          <a href="?category=0">综合</a>
-          <span class="fly-mid"></span>
-          {% endif %}
-
-          {% for i in cate %}
-          {% if i.categoryId == category_id %}
-          <a href="?category={{i.categoryId}}" class='layui-this'>{{i.name}}</a>
-          <span class="fly-mid"></span>
-          {% else %}
-          <a href="?category={{i.categoryId}}">{{i.name}}</a>
-          <span class="fly-mid"></span>
-          {% endif %}
-          {% endfor %}
+          <text class='layui-this'>精彩的在这里...</text>
         </div>
 
         <ul class="fly-list">
-          {% for i in art %}
+          {% for i in article %}
           <li>
             <a href="/account/u/{{i.user.id}}" class="fly-avatar">
               <img src="{{i.user.avatar}}" alt="贤心">
@@ -48,17 +32,20 @@
             <div class="fly-list-info">
               <a href="/account/u/{{i.user.id}}" link>
                 <cite>{{i.user.username}}</cite>
-                <!-- <i class="layui-badge fly-badge-vip">{{i.user.level}}</i> -->
+                <!-- <i class="layui-badge fly-badge-vip">{{i.user.jifen}}</i> -->
               </a>
               <span>{{i.createTime}}</span>
               <span class="fly-list-nums">
                 <i class="iconfont icon-pinglun1" title="回答"></i> {{i.comm_num}}
               </span>
             </div>
+            <div class="fly-list-badge">
+              <span class="layui-badge-rim"><a href="?category={{i.category_id}}" class='layui-this'>{{i.category}}</a></span>
+            </div>
           </li>
           {% endfor %}
 
-          {% if not art %}
+          {% if not article %}
           <div style="text-align: center;color:grey;padding-top: 20px;">暂无内容~</div>
           {% endif %}
         </ul>
@@ -81,32 +68,43 @@
     <!-- 左边内容 -->
     {% block left_content %}
     <div class="layui-col-md4">
-    	<div class="fly-panel">
-        	<div class="fly-panel-main">
-        		<p>{{request.web.welcome}}</p>
-        	</div>
+      <div class="fly-panel">
+        <div class="fly-panel-main">
+          <p>{{request.web.welcome}}</p>
+        </div>
       </div>
       <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
         <h3 class="fly-panel-title">最近登陆</h3>
         <dl id='rich_rank'>
-          {% for value in rich %}
-          <dd><a href="account/u/{{value.id}}"><img
-                src="{{value.avatar}}"><i>{{value.username}}</i></a></dd>
+          {% for value in login %}
+          <dd><a href="account/u/{{value.id}}"><img src="{{value.avatar}}"><i>{{value.username}}</i></a></dd>
           {% endfor %}
         </dl>
 
       </div>
       <div class="fly-panel">
         <div class="fly-panel-title">
-           温馨提示 
+         分类 
         </div>
         <div class="fly-panel-main">
-            <p>文章可【删除/编辑/评论】</p>
-            <br>
-            <p>发布一篇文章获得5个财富值！</p>
-            <br>
-            <p>删除一篇文章扣除20个财富值！</p>
+          <span class="layui-badge-rim"><a href="/" class='layui-this'>全部文章</a></span>
+          {% for i in cate %}
+          <span class="layui-badge-rim"><a href="?category={{i.id}}" class='layui-this'>{{i.name}}</a></span>
+          {% endfor %}
         </div>
+      </div>
+
+      <div class="fly-panel fly-link">
+        <h3 class="fly-panel-title">友情链接</h3>
+        <dl class="fly-panel-main">
+          {% for i in fineurl %}
+          <dd><a href="{{i.linkurl}}" target="_blank">{{i.linkname}}</a><dd>
+          {% endfor %}
+          
+          {% if not fineurl %}
+          <text style="color: grey;">暂无~</text>
+          {% endif %}
+        </dl>
       </div>
     </div>
   </div>

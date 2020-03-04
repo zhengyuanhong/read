@@ -19,8 +19,8 @@
                   <label class="layui-form-label">所在的专栏</label>
                   <div class="layui-input-block">
                     <select lay-verify="required" name="category" lay-filter="column">
-                      {% for i in data %}
-                      <option value="{{i.categoryId}}">{{i.name}}</option>
+                      {% for i in cate %}
+                      <option value="{{i.id}}">{{i.name}}</option>
                       {% endfor %}
                     </select>
                   </div>

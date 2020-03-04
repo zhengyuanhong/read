@@ -19,11 +19,11 @@
                   <label class="layui-form-label">所在专栏</label>
                   <div class="layui-input-block">
                     <select lay-verify="required" name="category" lay-filter="column">
-                      {% for i in catedata %}
-                      {% if i.categoryId == cate.categoryId %}
-                      <option value="{{i.categoryId}}" selected='selected' >{{i.name}}</option>
+                      {% for i in category_data %}
+                      {% if i.id == category_id %}
+                      <option value="{{i.id}}" selected='selected' >{{i.name}}</option>
                       {% else %}
-                      <option value="{{i.categoryId}}">{{i.name}}</option>
+                      <option value="{{i.id}}">{{i.name}}</option>
                       {% endif %}
                       {% endfor %}
                     </select>
@@ -45,7 +45,7 @@
               </div>
               <div class="layui-form-item">
                 <input type="hidden" name="aid" value="{{id}}">
-                <button class="layui-btn" lay-filter="edit" lay-submit>立即发布</button>
+                <button class="layui-btn" lay-filter="edit" lay-submit>立即更新</button>
               </div>
             </form>
           </div>
