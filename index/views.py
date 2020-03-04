@@ -25,10 +25,10 @@ def index(request):
 
         if int(category) == 0:
             art = article.objects.filter(
-                is_show=True).all().order_by('-is_top','-createTime')
+                is_show=True).all().order_by('-is_top', '-createTime')
         else:
             art = article.objects.filter(category=category).filter(
-                is_show=True).all().order_by('-is_top','-createTime')
+                is_show=True).all().order_by('-is_top', '-createTime')
 
         # 分页显示，把status 的数据按照3个一页显示
         paginator = Paginator(art, 20)
@@ -74,19 +74,14 @@ def detail(request, article_id):
     detail = article.objects.filter(id=article_id).first()  # 获取文章详情
 
     if not detail:
-        return render(request, '404.html',{'tip':'该文章已被作者删除'})
+        return render(request, '404.html', {'tip': '该文章已被作者删除'})
 
     if not detail.is_show:
-        return render(request, '404.html',{'tip':'该文章已违规，已被管理员删除'})
+        return render(request, '404.html', {'tip': '该文章已违规，已被管理员删除'})
 
     comment = comments.objects.filter(aid=detail)
     comm_num = comment.count()  # 获取评论条数
     author = detail.uid  # 获取作者信息
-
-    if types == 'message':
-        n = notify.objects.filter(aid=article_id).first()
-        n.is_read = 1
-        n.save()
 
     data = []
     index = 0
@@ -108,25 +103,26 @@ def postAdd(request):
     if request.method == 'GET':
         # 如果积分少于15，就不能发布文章
         if request.user.jifen <= settings.QUAN_XIAN:
-            return render(request, 'refuse_write.html',{'tip':'你的财富值不够发表文章，去评论其他文章可获得更多财富'})
+            return render(request, 'refuse_write.html', {'tip': '你的财富值不够发表文章，去评论其他文章可获得更多财富'})
 
-        now = datetime.datetime.now() 
-        count = article.objects.filter(uid=request.user).filter(createTime__year=now.year,createTime__month=now.month,createTime__day=now.day).count()
+        now = datetime.datetime.now()
+        count = article.objects.filter(uid=request.user).filter(
+            createTime__year=now.year, createTime__month=now.month, createTime__day=now.day).count()
         # 每个账号每天只能发布五篇文章
         if count >= settings.MAX_NUM:
-            return render(request, 'refuse_write.html',{'tip':'你今天已经发布了{}篇文章，明天再来吧'.format(settings.MAX_NUM)})
+            return render(request, 'refuse_write.html', {'tip': '你今天已经发布了{}篇文章，明天再来吧'.format(settings.MAX_NUM)})
 
         # 数字转中文
-        intTozh={
-            1:'一',
-            2:'两',
-            3:'三',
-            4:'四',
-            5:'五',
+        intTozh = {
+            1: '一',
+            2: '两',
+            3: '三',
+            4: '四',
+            5: '五',
         }
         num = intTozh[settings.MAX_NUM-count]
         data = cate.objects.all()
-        return render(request, 'index/add.html', {'data': data,'num':num})
+        return render(request, 'index/add.html', {'data': data, 'num': num})
 
     if request.method == 'POST':
         category = request.POST.get('category')
@@ -213,13 +209,7 @@ def postReply(request):
             aid_id=aid, comm_uid_id=request.user.id, comm_content=content)
 
         # 增加评论积分
-        addJiFen(request, settings.ADD_REPLAY_JIFEN) 
-
-        # TODO 去通知作者 有人评论评论帖子
-        articleInfo = article.objects.filter(id=aid).first()
-        author = articleInfo.uid
-        title = articleInfo.title
-        notify.objects.create(is_read=0, uid=author, content=title, aid=aid)
+        addJiFen(request, settings.ADD_REPLAY_JIFEN)
         return JsonResponse({'code': 200, 'msg': '发布成功'})
 
 

@@ -71,9 +71,11 @@ def random_str(randomlength=4):
     return str
 
 # 发送重置密码邮箱
-def sendResetPassUrl(token,email,username):
+
+
+def sendResetPassUrl(token, email, username):
     subject = settings.WEB_NAME+'（重置密码）'
-    message = '' 
+    message = ''
     url = '{}/account/reset_password?token={}'.format(settings.HOST_URL, token)
     msg_template = '''
         亲爱的{username}，您收到这封邮件是因为您申请重置密码。
@@ -82,29 +84,28 @@ def sendResetPassUrl(token,email,username):
         <br>
         <a href="{url}" >点击重置密码</a>
         '''
-    msg_template = msg_template.format(username=username,expires=int(settings.EXPIRE_TOKEN_TIME/3600),url=url)
-    sendMail(subject, message, [email],html_message=msg_template)
+    msg_template = msg_template.format(username=username, expires=int(
+        settings.EXPIRE_TOKEN_TIME/3600), url=url)
+    sendMail(subject, message, [email], html_message=msg_template)
 
 # 发送验证账号邮箱
+
+
 def sendVerif(verif_code, email):
-    try:
-        subject = '欢迎注册'+settings.WEB_NAME
+    subject = '欢迎注册'+settings.WEB_NAME
 
-        url = '{}/account/verif?token={}'.format(settings.HOST_URL, verif_code)
-        message = ''
+    url = '{}/account/verif?token={}'.format(settings.HOST_URL, verif_code)
+    message = ''
 
-        msg_template = '''
+    msg_template = '''
         有效期：{expires}小时
         <a href="{url}" >点击链接激活</a>
         '''
 
-        html_message = msg_template.format(
-            expires=int(settings.EXPIRE_TOKEN_TIME/3600), url=url)
-        email_list = [email]
-        sendMail(subject, message, email_list, html_message=html_message)
-    except Exception:
-        return False
-    return True
+    html_message = msg_template.format(
+        expires=int(settings.EXPIRE_TOKEN_TIME/3600), url=url)
+    email_list = [email]
+    sendMail(subject, message, email_list, html_message=html_message)
 
 
 def addJiFen(request, num):

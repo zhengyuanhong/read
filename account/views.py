@@ -111,12 +111,11 @@ def accountRegister(request):
         # TODO 邮箱验证
         userinfo = {'email': email}
         verif_code = get_token(userinfo)
-        res = sendVerif(verif_code, email)
-        if not res:
-            return JsonResponse({'code': 201, 'msg': '检查邮箱是否正确'})
+        sendVerif(verif_code, email)
 
         siteUser.objects.create_user(
             username=username, email=email, password=password, is_verif=False)
+
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
     return render(request, 'account/reg.html')
 
