@@ -39,14 +39,14 @@ class comments(models.Model):
 class notify(models.Model):
     is_read = models.IntegerField(
         '是否已读', choices=((1, '已读'), (0, '未读')), default=0)
-    content = models.CharField('内容', max_length=50)
-    aid = models.IntegerField('文章id', default=0)
-    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField('通知内容')
+    aid = models.IntegerField('文章id/为0时管理员通知', default=0)
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,verbose_name='接收者')
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = verbose_name = '评论通知'
+        verbose_name_plural = verbose_name = '消息通知'
 
 
 class fineLink(models.Model):
