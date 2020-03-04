@@ -20,7 +20,9 @@ class articleAdmin(admin.ModelAdmin):
 @admin.register(notify)
 class notifyAdmin(admin.ModelAdmin):
     list_display=('id','uid','aid','content','is_read','updateTime','createTime')
+    list_display_links = ('content',)
     search_fields = ('aid',)
+    list_editable = ('is_read',)
 
 #修改网页title和站点header。
 admin.site.site_title = settings.WEB_NAME+"后台管理"
