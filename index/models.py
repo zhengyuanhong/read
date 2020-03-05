@@ -5,7 +5,7 @@ from django.conf import settings
 class article(models.Model):
     title = models.CharField('标题', max_length=50)
     content = models.TextField('内容')
-    category = models.IntegerField('分类id', default=0)
+    category = models.ForeignKey('category',on_delete=models.SET_NULL,null=True,verbose_name='分类')
     uid = models.ForeignKey(settings.AUTH_USER_MODEL,
                             on_delete=models.CASCADE, related_name='user')
     is_show = models.BooleanField('是否显示',default=True)
@@ -50,8 +50,8 @@ class notify(models.Model):
 
 
 class fineLink(models.Model):
-    linkname = models.CharField('链接名称', max_length=10)
-    linkurl = models.CharField('链接url', max_length=100)
+    linkname = models.CharField('链接名称', max_length=20)
+    linkurl = models.URLField('链接url', max_length=100)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 
@@ -64,7 +64,6 @@ class fineLink(models.Model):
 
 class category(models.Model):
     name = models.CharField('分类名称', max_length=10)
-    categoryId = models.IntegerField('分类下标', default=0)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 

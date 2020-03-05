@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.cache import cache
 from account.models import siteUser
 from django.core.paginator import Paginator
-from .models import article, comments, category as cate, notify
+from .models import article, comments, category as cate, notify,fineLink
 from django.contrib.auth.decorators import login_required
 from utils.util import addJiFen, reduceJiFen, formateTime
 import datetime
@@ -17,17 +17,16 @@ def index_page_not_found(request):
 
 def index(request):
     if request.method == 'GET':
-        category = request.GET.get('category', 0)
+        category = int(request.GET.get('category',0))
         page_id = request.GET.get('page', 1)
-        if int(page_id) <= 0 or int(category) < 0:
+        if int(page_id) <= 0:
             page_id = 1
-            category = 0
 
-        if int(category) == 0:
+        if category == 0:
             art = article.objects.filter(
                 is_show=True).all().order_by('-is_top', '-createTime')
         else:
-            art = article.objects.filter(category=category).filter(
+            art = article.objects.filter(category_id=category).filter(
                 is_show=True).all().order_by('-is_top', '-createTime')
 
         # 分页显示，把status 的数据按照3个一页显示
@@ -36,7 +35,7 @@ def index(request):
         page = paginator.page(page_id)
 
         # 更具分类category 获取首页数据
-        data = []
+        article_data = []
         for i in page:
             temp = {}
             temp['id'] = i.id
@@ -46,31 +45,23 @@ def index(request):
                 str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
             temp['comm_num'] = i.article.count()
             temp['is_top'] = i.is_top
-            data.append(temp)
+            temp['category'] = i.category.name if i.category else '综合'
+            temp['category_id'] = i.category.id if i.category else 0
+            article_data.append(temp)
 
         # 最近注册
-        userRich = siteUser.objects.all().order_by('-last_login')[0:16]
-
-        richdata = []
-        for u in userRich:
-            temp = {}
-            temp['id'] = u.id
-            temp['username'] = u.username
-            temp['avatar'] = u.avatar
-            temp['jifen'] = u.jifen
-            richdata.append(temp)
+        userLogin = siteUser.objects.all().order_by('-last_login')[0:16]
 
         context = {}
-        context['art'] = data
-        context['rich'] = richdata
+        context['article'] = article_data
+        context['login'] = userLogin 
         context['page'] = page
-        context['cate'] = cate.objects.order_by('categoryId')
-        context['category_id'] = int(category)
+        context['cate'] = cate.objects.all()
+        context['fineurl'] = fineLink.objects.all() 
         return render(request, 'index/index.html', context)
 
 
 def detail(request, article_id):
-    types = request.GET.get('type')
     detail = article.objects.filter(id=article_id).first()  # 获取文章详情
 
     if not detail:
@@ -121,8 +112,8 @@ def postAdd(request):
             5: '五',
         }
         num = intTozh[settings.MAX_NUM-count]
-        data = cate.objects.all()
-        return render(request, 'index/add.html', {'data': data, 'num': num})
+        category = cate.objects.all()        
+        return render(request, 'index/add.html', {'cate': category, 'num': num})
 
     if request.method == 'POST':
         category = request.POST.get('category')
@@ -136,7 +127,7 @@ def postAdd(request):
             return JsonResponse({'code': 201, 'msg': '内容不能为空'})
 
         article.objects.create(
-            category=category, title=title, content=content, uid=request.user)
+            category_id=category, title=title, content=content, uid=request.user)
         # 发布文章增加5个积分
         addJiFen(request, settings.ADD_JIFEN)
 
@@ -148,15 +139,15 @@ def editArticle(request, article_id):
     if request.method == 'GET':
         detail = article.objects.filter(
             id=article_id, uid_id=request.user.id).first()
-        catedata = cate.objects.all()
-        article_cate = cate.objects.filter(categoryId=detail.category).first()
+        category_data = cate.objects.all()
+        # article_cate = cate.objects.filter(id=detail.category_id).first()
 
         context = {}
         context['id'] = detail.id
-        context['cate'] = article_cate
+        context['category_id'] = detail.category.id
         context['title'] = detail.title
         context['content'] = detail.content
-        context['catedata'] = catedata
+        context['category_data'] = category_data 
         return render(request, 'index/edit.html', context)
 
     if request.method == 'POST':
@@ -172,7 +163,7 @@ def editArticle(request, article_id):
 
         detail = article.objects.filter(id=request.POST.get(
             'aid'), uid_id=request.user.id).first()
-        detail.category = category
+        detail.category_id = category
         detail.title = title
         detail.content = content
         detail.save()
