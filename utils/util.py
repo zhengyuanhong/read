@@ -122,3 +122,12 @@ def reduceJiFen(request, num):
         user.jifen -= num
         user.save()
         return True
+
+def getlevel(request):
+    jifen = request.user.jifen
+    if jifen >= 0 and jifen < 100:
+        return 3
+    elif jifen >=100 and jifen < 300:
+        return 5
+    else:
+        return 0 

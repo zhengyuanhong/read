@@ -4,9 +4,9 @@ from django.conf import settings
 from django.core.cache import cache
 from account.models import siteUser
 from django.core.paginator import Paginator
-from .models import article, comments, category as cate, notify,fineLink
+from .models import article, comments, category as cate, notify, fineLink
 from django.contrib.auth.decorators import login_required
-from utils.util import addJiFen, reduceJiFen, formateTime
+from utils.util import addJiFen, reduceJiFen, formateTime, getlevel
 import datetime
 # Create your views here.
 
@@ -17,7 +17,7 @@ def index_page_not_found(request):
 
 def index(request):
     if request.method == 'GET':
-        category = int(request.GET.get('category',0))
+        category = int(request.GET.get('category', 0))
         page_id = request.GET.get('page', 1)
         if int(page_id) <= 0:
             page_id = 1
@@ -54,10 +54,10 @@ def index(request):
 
         context = {}
         context['article'] = article_data
-        context['login'] = userLogin 
+        context['login'] = userLogin
         context['page'] = page
         context['cate'] = cate.objects.all()
-        context['fineurl'] = fineLink.objects.all() 
+        context['fineurl'] = fineLink.objects.all()
         return render(request, 'index/index.html', context)
 
 
@@ -92,27 +92,30 @@ def detail(request, article_id):
 @login_required
 def postAdd(request):
     if request.method == 'GET':
-        # 如果积分少于15，就不能发布文章
-        if request.user.jifen <= settings.QUAN_XIAN:
-            return render(request, 'refuse_write.html', {'tip': '你的财富值不够发表文章，去评论其他文章可获得更多财富'})
+        # 获取发布文章次数
+        res = getlevel(request)
+        # 如果获取次数，则限制次数
+        num = 0
+        if res != 0:
+            now = datetime.datetime.now()
+            count = article.objects.filter(uid=request.user).filter(
+                createTime__year=now.year, createTime__month=now.month, createTime__day=now.day).count()
+            # 每个账号每天只能发布res篇文章
+            if count >= res:
+                return render(request, 'refuse_write.html', {'tip': '你今天已经发布了{}篇文章，明天再来吧'.format(res)})
 
-        now = datetime.datetime.now()
-        count = article.objects.filter(uid=request.user).filter(
-            createTime__year=now.year, createTime__month=now.month, createTime__day=now.day).count()
-        # 每个账号每天只能发布五篇文章
-        if count >= settings.MAX_NUM:
-            return render(request, 'refuse_write.html', {'tip': '你今天已经发布了{}篇文章，明天再来吧'.format(settings.MAX_NUM)})
-
-        # 数字转中文
-        intTozh = {
-            1: '一',
-            2: '两',
-            3: '三',
-            4: '四',
-            5: '五',
-        }
-        num = intTozh[settings.MAX_NUM-count]
-        category = cate.objects.all()        
+            # 数字转中文
+            intTozh = {
+                1: '一',
+                2: '两',
+                3: '三',
+                4: '四',
+                5: '五',
+            }
+            num = intTozh[res-count]
+        else:
+            num = 0
+        category = cate.objects.all()
         return render(request, 'index/add.html', {'cate': category, 'num': num})
 
     if request.method == 'POST':
@@ -147,7 +150,7 @@ def editArticle(request, article_id):
         context['category_id'] = detail.category.id
         context['title'] = detail.title
         context['content'] = detail.content
-        context['category_data'] = category_data 
+        context['category_data'] = category_data
         return render(request, 'index/edit.html', context)
 
     if request.method == 'POST':
