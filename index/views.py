@@ -8,6 +8,7 @@ from .models import article, comments, category as cate, notify, fineLink
 from django.contrib.auth.decorators import login_required
 from utils.util import addJiFen, reduceJiFen, formateTime, getlevel
 import datetime
+from django.db.models import Count
 # Create your views here.
 
 
@@ -58,6 +59,8 @@ def index(request):
         context['page'] = page
         context['cate'] = cate.objects.all()
         context['fineurl'] = fineLink.objects.all()
+        # 查询 每本书名下的文章数量
+        context['hot'] = cate.objects.annotate(post_num=Count('article')).filter(post_num__gt=0).order_by('-post_num')[0:10]
         return render(request, 'index/index.html', context)
 
 
@@ -88,35 +91,48 @@ def detail(request, article_id):
 
     return render(request, 'index/detail.html', {'detail': detail, 'author': author, 'comm_num': comm_num, 'data': data})
 
+@login_required
+def createCategory(request):
+    if request.method == 'POST':
+        book_name = request.POST.get('book_name')
+        if not book_name:
+            return JsonResponse({'code':201,'msg':'内容不能为空'})
+
+        exits = cate.objects.filter(name=book_name).exists()
+        if exits:
+            return JsonResponse({'code':201,'msg':'已经存在'})
+
+        cate.objects.create(name=book_name,create_user=request.user)
+        return JsonResponse({'code':200,'msg':'创建成功'})
 
 @login_required
 def postAdd(request):
     if request.method == 'GET':
         # 获取发布文章次数
-        res = getlevel(request)
+        # res = getlevel(request)
         # 如果获取次数，则限制次数
-        num = 0
-        if res != 0:
-            now = datetime.datetime.now()
-            count = article.objects.filter(uid=request.user).filter(
-                createTime__year=now.year, createTime__month=now.month, createTime__day=now.day).count()
+        # num = 0
+        # if res != 0:
+        #     now = datetime.datetime.now()
+        #     count = article.objects.filter(uid=request.user).filter(
+        #         createTime__year=now.year, createTime__month=now.month, createTime__day=now.day).count()
             # 每个账号每天只能发布res篇文章
-            if count >= res:
-                return render(request, 'refuse_write.html', {'tip': '你今天已经发布了{}篇文章，明天再来吧'.format(res)})
+            # if count >= res:
+            #     return render(request, 'refuse_write.html', {'tip': '你今天已经发布了{}篇文章，明天再来吧'.format(res)})
 
             # 数字转中文
-            intTozh = {
-                1: '一',
-                2: '两',
-                3: '三',
-                4: '四',
-                5: '五',
-            }
-            num = intTozh[res-count]
-        else:
-            num = 0
+        #     intTozh = {
+        #         1: '一',
+        #         2: '两',
+        #         3: '三',
+        #         4: '四',
+        #         5: '五',
+        #     }
+        #     num = intTozh[res-count]
+        # else:
+        #     num = 0
         category = cate.objects.all()
-        return render(request, 'index/add.html', {'cate': category, 'num': num})
+        return render(request, 'index/add.html', {'cate': category})
 
     if request.method == 'POST':
         category = request.POST.get('category')
@@ -138,23 +154,20 @@ def postAdd(request):
 
 
 @login_required
-def editArticle(request, article_id):
+def editArticle(request):
     if request.method == 'GET':
         detail = article.objects.filter(
-            id=article_id, uid_id=request.user.id).first()
-        category_data = cate.objects.all()
-        # article_cate = cate.objects.filter(id=detail.category_id).first()
+            id=request.GET.get('aid'), uid_id=request.user.id).first()
 
         context = {}
         context['id'] = detail.id
+        context['category_name'] = detail.category.name
         context['category_id'] = detail.category.id
         context['title'] = detail.title
         context['content'] = detail.content
-        context['category_data'] = category_data
         return render(request, 'index/edit.html', context)
 
     if request.method == 'POST':
-        category = request.POST.get('category')
         title = request.POST.get('title')
         content = request.POST.get('content')
 
@@ -166,7 +179,7 @@ def editArticle(request, article_id):
 
         detail = article.objects.filter(id=request.POST.get(
             'aid'), uid_id=request.user.id).first()
-        detail.category_id = category
+
         detail.title = title
         detail.content = content
         detail.save()

@@ -17,6 +17,7 @@ def page_not_found(request):
     
 def accountUser(request, userId):
     user = siteUser.objects.get(id=userId)
+
     return render(request, 'account/account.html', {'user': user})
 
 def accountUserComment(request):
@@ -50,6 +51,7 @@ def accountUserArticle(request):
             temp['title']=u.title
             temp['time']= formateTime(str(u.createTime.strftime("%Y-%m-%d %H:%M:%S")))
             temp['comm_num']=u.article.count()
+            temp['book_name']=u.category.name
             data.append(temp)
 
         context = {}
