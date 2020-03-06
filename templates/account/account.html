@@ -1,7 +1,7 @@
 {% extends 'layout/base.html' %}
-
+{% load static %}
 {% block userInfo %}
-<div class="fly-home fly-panel" style="background-image: url();">
+<div id="user_id" data="{{user.id}}" class="fly-home fly-panel" style="background-image: url();">
   <img src="{{user.avatar}}" alt="{{user.username}}">
   <h1>
     {{user.username}}
@@ -18,10 +18,9 @@
   </p>
 
   <p class="fly-home-sign">{{user.qianming}}</p>
-
   {% if user.id == request.user.id %}
   <a href="{% url 'postAdd' %}" style="margin-top: 15px;" class="layui-btn layui-btn-primary fly-imActive"
-    data-type="addFriend">写点东西</a>
+    data-type="addFriend">写点什么</a>
   {% endif %}
 </div>
 
@@ -53,49 +52,5 @@
 {% endblock %}
 
 {% block script %}
-<script>
-  layui.use(['jquery'], function () {
-    var $ = layui.jquery
-    $.ajax({
-      url: 'article',
-      method: 'get',
-      data: {userid:"{{user.id}}"},
-      dataType: 'JSON',
-      success: function (res) {
-        if (res.code == 200) {
-          if (res.data.length > 0) {
-            $.each(res.data, function (index, value) {
-              var str = '<li><a href="/detail/' + value.id + '" class="jie-title">' + value.title + '</a><i>' + value.time + '</i><em class="layui-hide-xs">' + value.comm_num + '条评论</em></li>'
-              $('#user_article').append(str)
-            })
-          } else {
-            $('#user_article').append('<div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>没写任何东西</span></div>')
-          }
-        }
-      }
-    });
-
-    $.ajax({
-      url: 'comment',
-      method: 'get',
-      data: {userid:"{{user.id}}"},
-      dataType: 'JSON',
-      success: function (res) {
-        if (res.code == 200) {
-          if (res.data.length > 0) {
-            $.each(res.data, function (index, value) {
-              var str = '<li><p><span>'+value.time+'</span>在<a href="/detail/'+value.article_id+'" target="_blank">'+value.article_title+'</a>参与评论</p></li>'
-              $('#user_comment').append(str)
-            })
-          } else {
-            $('#user_comment').append('<div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>没有参与任何评论</span></div>')
-          }
-        }
-      }
-    });
-
-  });
-
-  
-</script>
+<script src="{% static 'index/js/account.js' %}"></script>
 {% endblock %}

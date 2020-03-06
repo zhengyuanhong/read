@@ -13,28 +13,32 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path,include,re_path
-from index.views import index,getUserRank,detail,postAdd,uploadImage,postReply,editArticle,deleteArticle,index_page_not_found
-import account
+from django.conf import settings
 from django.views.static import serve
-from django.conf import settings 
+import account
+from django.contrib import admin
+from django.urls import path, include, re_path
+from index.views import index, getUserRank, detail, \
+    postAdd, uploadImage, postReply, editArticle,\
+    deleteArticle, index_page_not_found, createCategory
 
 urlpatterns = [
     path('read_admin/', admin.site.urls),
-    path('',index,name='index'),
-    path('detail/<int:article_id>',detail,name='detail'),
-    path('detail/edit/<int:article_id>',editArticle,name='editArticle'),
-    path('detail/reply',postReply,name='postReply'),
-    path('detail/delete',deleteArticle,name='deleteArticle'),
-    path('add',postAdd,name='postAdd'),
-    path('upload',uploadImage,name='uploadImage'),
-    path('account/',include('account.urls')),
-    path('rank',getUserRank),
-    re_path(r'^media/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT})
+    path('', index, name='index'),
+    path('detail/<int:article_id>', detail, name='detail'),
+    path('detail/edit', editArticle, name='editArticle'),
+    path('detail/reply', postReply, name='postReply'),
+    path('detail/delete', deleteArticle, name='deleteArticle'),
+    path('add', postAdd, name='postAdd'),
+    path('create', createCategory, name='createCategory'),
+    path('upload', uploadImage, name='uploadImage'),
+    path('account/', include('account.urls')),
+    path('rank', getUserRank),
+    re_path(r'^media/(?P<path>.*)$', serve,
+            {'document_root': settings.MEDIA_ROOT})
 ]
 
-handler404 = account.views.page_not_found 
-handler500 = account.views.page_not_found 
-handler404 = index_page_not_found 
+handler404 = account.views.page_not_found
+handler500 = account.views.page_not_found
+handler404 = index_page_not_found
 handler500 = index_page_not_found
