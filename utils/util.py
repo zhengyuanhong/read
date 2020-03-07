@@ -6,7 +6,8 @@ import uuid
 import hashlib
 import time
 import datetime
-
+import os,math
+from .qiniu import uploadQiniu
 
 def formateTime(str_time):
     timeArray = time.strptime(str_time, '%Y-%m-%d %H:%M:%S')
@@ -123,11 +124,72 @@ def reduceJiFen(request, num):
         user.save()
         return True
 
+
 def getlevel(request):
     jifen = request.user.jifen
     if jifen >= 0 and jifen < 100:
         return 3
-    elif jifen >=100 and jifen < 300:
+    elif jifen >= 100 and jifen < 300:
         return 5
     else:
-        return 0 
+        return 0
+
+
+def uploadImg(request, types):
+    myfile = request.FILES.get('file')
+    if math.ceil(myfile.size/1024) > 200:
+        # return JsonResponse({'code': 201, 'msg': '图片太大'})
+        return 0
+
+    ext = myfile.name.split('.', 1)[1]
+    if ext not in ['jpg', 'png', 'gif']:
+        # return JsonResponse({'code': 201, 'msg': '不是我要的格式'})
+        return 1
+
+    filepath = os.path.join(settings.MEDIA_ROOT, types, myfile.name)
+    f = open(filepath, 'wb')
+    for i in myfile.chunks():
+        f.write(i)
+    f.close()
+
+    # 图片命名
+    timename = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())
+    savename = "{}:{}:{}.{}".format(types, request.user.id, timename, ext)
+
+    res = uploadQiniu(filepath, savename)
+    if res['key'] != savename:
+        # return JsonResponse({'code': 201, 'msg': '上传失败', 'res': res})
+        return 2 
+
+    return savename
+
+    # myfile = request.FILES.get('file')
+    # if math.ceil(myfile.size/1024) > 200:
+    #     return JsonResponse({'code': 201, 'msg': '图片太大'})
+
+    # ext = myfile.name.split('.', 1)[1]
+    # if ext not in ['jpg', 'png', 'gif']:
+    #     return JsonResponse({'code': 201, 'msg': '不是我要的格式'})
+
+    # filepath = os.path.join(settings.MEDIA_ROOT,'avatars',myfile.name)
+    # f = open(filepath, 'wb')
+    # for i in myfile.chunks():
+    #     f.write(i)
+    # f.close()
+
+    # # 图片命名
+    # timename = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime())
+    # savename = "{}:{}:{}.{}".format(
+    #     'userAvatar', request.user.id, timename, ext)
+
+    # res = uploadQiniu(filepath, savename)
+    # if res['key'] != savename:
+    #     return JsonResponse({'code': 201, 'msg': '上传失败', 'res': res})
+    # try:
+    #     user = siteUser.objects.get(id=request.user.id)
+    # except Exception:
+    #     return JsonResponse({'code': 201, 'msg': '上传失败', 'res': res})
+
+    # user.avatar = settings.QINIU_DOMAIN + savename
+    # user.save()
+    # return JsonResponse({'code': 200, 'msg': '上传成功', 'res': res})
