@@ -10,6 +10,10 @@
     {% else %}
     <i class="iconfont icon-nv"></i>
     {% endif %}
+
+    {% if user.is_staff %}
+    <span>（管理员）</span>
+    {% endif %}
   </h1>
 
   <p class="fly-home-info">
