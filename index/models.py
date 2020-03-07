@@ -5,7 +5,7 @@ from django.conf import settings
 class article(models.Model):
     title = models.CharField('标题', max_length=50)
     content = models.TextField('内容')
-    category = models.ForeignKey('category',on_delete=models.SET_NULL,null=True,verbose_name='分类')
+    category = models.ForeignKey('category',on_delete=models.SET_NULL,null=True,blank=True,verbose_name='分类')
     uid = models.ForeignKey(settings.AUTH_USER_MODEL,
                             on_delete=models.CASCADE, related_name='user')
     is_show = models.BooleanField('是否显示',default=True)
@@ -64,8 +64,8 @@ class fineLink(models.Model):
 
 class category(models.Model):
     name = models.CharField('书名', max_length=20)
-    create_user  = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,verbose_name='创建者')
-    book_url = models.URLField('购买链接',null=True)
+    create_user  = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='创建者')
+    book_url = models.URLField('购买链接',null=True,blank=True)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 
