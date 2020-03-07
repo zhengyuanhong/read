@@ -137,14 +137,10 @@ def emailTip(request):
     return render(request, 'account/verif.html')
 
 # 邮箱验证过期
-
-
 def verifEmail(request):
     return render(request, 'account/verif_expire.html')
 
 # 账号激活验证
-
-
 def verif(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -323,13 +319,10 @@ def uploadImage(request):
         return JsonResponse({'code': 200, 'msg': '上传成功'})
 
 
-
 def getMessage(request):
     return render(request, 'account/message.html')
 
 # 获取信息
-
-
 def getMsg(request):
     if request.method == 'GET':
         message = notify.objects.filter(
@@ -352,8 +345,6 @@ def getMsg(request):
         return JsonResponse(context)
 
 # 删除信息
-
-
 def delMsg(request):
     if request.method == 'GET':
         notify_id = request.GET.get('id', None)
