@@ -60,7 +60,8 @@ def index(request):
         context['cate'] = cate.objects.all()
         context['fineurl'] = fineLink.objects.all()
         # 查询 每本书名下的文章数量
-        context['hot'] = cate.objects.annotate(post_num=Count('article')).filter(post_num__gt=0).order_by('-post_num')[0:10]
+        context['hot'] = cate.objects.annotate(post_num=Count('article')).filter(
+            post_num__gt=0).order_by('-post_num')[0:10]
         return render(request, 'index/index.html', context)
 
 
@@ -89,21 +90,30 @@ def detail(request, article_id):
             str(m.createTime.strftime("%Y-%m-%d %H:%M:%S")))
         data.append(temp)
 
-    return render(request, 'index/detail.html', {'detail': detail, 'author': author, 'comm_num': comm_num, 'data': data})
+    context = {
+        'detail': detail,
+        'author': author,
+        'comm_num': comm_num,
+        'data': data
+    }
+
+    return render(request, 'index/detail.html', context)
+
 
 @login_required
 def createCategory(request):
     if request.method == 'POST':
         book_name = request.POST.get('book_name')
         if not book_name:
-            return JsonResponse({'code':201,'msg':'内容不能为空'})
+            return JsonResponse({'code': 201, 'msg': '内容不能为空'})
 
         exits = cate.objects.filter(name=book_name).exists()
         if exits:
-            return JsonResponse({'code':201,'msg':'已经存在'})
+            return JsonResponse({'code': 201, 'msg': '已经存在'})
 
-        cate.objects.create(name=book_name,create_user=request.user)
-        return JsonResponse({'code':200,'msg':'创建成功'})
+        cate.objects.create(name=book_name, create_user=request.user)
+        return JsonResponse({'code': 200, 'msg': '创建成功'})
+
 
 @login_required
 def postAdd(request):

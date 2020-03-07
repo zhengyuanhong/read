@@ -9,8 +9,7 @@
       <div class="fly-panel detail-box">
         <h1>{{detail.title}}</h1>
         <div class="fly-detail-info">
-          <span style="color:gray;">{{detail.createTime}}</span>
-          <span class="layui-badge" >{{detail.category.name}}</span>
+          <span style="color:gray;">书名：《{{detail.category.name}}》</span>
           <span class="fly-list-nums">
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> {{comm_num}}</a>
           </span>
@@ -23,14 +22,15 @@
             <a href="/account/u/{{author.id}}" class="fly-link">
               <cite>{{author.username}}</cite>
             </a>
-            <span></span>
+            <span style="color:gray;">{{detail.createTime}}</span>
           </div>
           <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
             <span style="padding-right: 10px; color: #FF7200">财富：{{author.jifen}}</span>
             {% if author.id == request.user.id %}
             <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a
                 href="/detail/edit?aid={{detail.id}}">编辑此贴</a></span>
-            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a id='delete' data="{{detail.id}}" href="#">删除此贴</a></span>
+            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a id='delete' data="{{detail.id}}"
+                href="#">删除此贴</a></span>
             {% endif %}
           </div>
         </div>
@@ -108,33 +108,45 @@
     {% endblock %}
     {% block left_content %}
     <div class="layui-col-md4">
-      
+
       <div class="fly-panel">
         <div class="fly-panel-title">
-           文章欣赏 
+          文章欣赏
         </div>
         <div class="fly-panel-main">
-            <p>雨，出其不意的到来</p>
-            <br>
-            <p>让所有的行人措手不及</p>
-            <br>
-            <p>雨滴噼里啪啦的打在窗户的玻璃上，然后又迅速的散开</p>
-            <br>
-            <p>犹如一个生命，在来不及惋惜的时候就离开</p>
-            <br>
-            <p>那些还呆在房子外面的人，全都撑起了伞</p>
-            <br>
-            <p>红的，蓝的，浅紫色的，还有透明的</p>
-            <br>
-            <p>一个个的在雨里来回的走动</p>
-            <br>
-            <p>水汽迅速的升腾起来，远景开始变得模糊起来</p>
-            <br>
-            <p>桌子上的咖啡却给人一种安详感 </p>   
-            <br>
+          <p>雨，出其不意的到来</p>
+          <br>
+          <p>让所有的行人措手不及</p>
+          <br>
+          <p>雨滴噼里啪啦的打在窗户的玻璃上，然后又迅速的散开</p>
+          <br>
+          <p>犹如一个生命，在来不及惋惜的时候就离开</p>
+          <br>
+          <p>那些还呆在房子外面的人，全都撑起了伞</p>
+          <br>
+          <p>红的，蓝的，浅紫色的，还有透明的</p>
+          <br>
+          <p>一个个的在雨里来回的走动</p>
+          <br>
+          <p>水汽迅速的升腾起来，远景开始变得模糊起来</p>
+          <br>
+          <p>桌子上的咖啡却给人一种安详感 </p>
+          <br>
         </div>
       </div>
 
+      {% if detail.category.book_url %}
+      <div class="fly-panel">
+        <div class="fly-panel-title">
+          官方推荐
+        </div>
+        <div class="fly-panel-main">
+          <a href="{{detail.category.book_url}}" target="_blank" class="fly-zanzhu"
+            time-limit="2017.09.25-2099.01.01"
+            style="background-color: #009688; background-image: linear-gradient(to right,#009688,#5FB878);">《{{detail.category.name}}》</a>
+        </div>
+      </div>
+      {% endif %}
       <!-- <div class="fly-panel" style="padding: 20px 0; text-align: center;">
         <img src="{% static 'index/images/weixin.jpg' %}" style="max-width: 100%;" alt="layui">
         <p style="position: relative; color: #666;">微信扫码关注 layui 公众号</p>

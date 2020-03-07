@@ -65,6 +65,7 @@ class fineLink(models.Model):
 class category(models.Model):
     name = models.CharField('书名', max_length=20)
     create_user  = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,verbose_name='创建者')
+    book_url = models.URLField('购买链接',null=True)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 

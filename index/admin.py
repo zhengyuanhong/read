@@ -4,8 +4,8 @@ from django.conf import settings
 
 @admin.register(category)
 class categoryAdmin(admin.ModelAdmin):
-    list_display = ('id','name','create_user','updateTime','createTime')
-    list_display_links = ('name','create_user')
+    list_display = ('id','name','create_user','book_url','updateTime','createTime')
+    list_display_links = ('name','create_user','book_url')
 
 @admin.register(comments)
 class CommentAdmin(admin.ModelAdmin):
