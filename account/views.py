@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from utils.qiniu import uploadQiniu
-from utils.util import get_token, de_token, sendVerif, formateTime, random_str, sendResetPassUrl, uploadImg
+from utils.util import get_token, de_token, formateTime, random_str, uploadImg
+from celery_task.task import sendMail,sendResetPassUrl
 from django.core.cache import cache
 import os
 import math
@@ -68,8 +69,6 @@ def accountUserArticle(request):
         context['data'] = data
         return JsonResponse(context)
 # 登陆
-
-
 def accountLogin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -94,8 +93,6 @@ def accountLogin(request):
     return render(request, 'account/login.html')
 
 # 注册
-
-
 def accountRegister(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -122,7 +119,8 @@ def accountRegister(request):
         # TODO 邮箱验证
         userinfo = {'email': email}
         verif_code = get_token(userinfo)
-        sendVerif(verif_code, email)
+        # sendVerif(verif_code, email)
+        sendMail.delay(verif_code, email)
 
         siteUser.objects.create_user(
             username=username, email=email, password=password, is_verif=False)
@@ -131,8 +129,6 @@ def accountRegister(request):
     return render(request, 'account/reg.html')
 
 # 邮箱发送提醒
-
-
 def emailTip(request):
     return render(request, 'account/verif.html')
 
@@ -177,8 +173,6 @@ def verif(request):
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
 
 # 登出
-
-
 def accountLoginOut(request):
     logout(request)
     return HttpResponseRedirect('/')
@@ -208,8 +202,6 @@ def setPassword(request):
             return JsonResponse({'code': 200, 'msg': '修改成功'})
 
 # 重置密码
-
-
 def resetPassword(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -250,8 +242,6 @@ def resetPassword(request):
         return JsonResponse({'code': 200, 'msg': '修改成功'})
 
 # 发送重置密码链接
-
-
 def sendResetPassword(request):
     if request.method == 'GET':
         return render(request, 'account/reset_pass.html', {'flag': True, 'tip': '请输入正确的邮箱地址（发送邮箱过程可能会有点长，请耐心等待）'})
@@ -263,7 +253,7 @@ def sendResetPassword(request):
             return render(request, 'account/reset_pass.html', {'flag': True, 'tip': '该邮箱未注册'})
 
         token = get_token({'email': email})
-        sendResetPassUrl(token, email, res.username)
+        sendResetPassUrl.delay(token, email, res.username)
         return render(request, 'account/reset_pass.html', {'flag': False, 'tip': '已发送到您的邮箱'})
 
 
@@ -272,8 +262,6 @@ def accountSet(request):
     return render(request, 'account/set.html')
 
 # 修改个人信息
-
-
 def setInfo(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -305,7 +293,7 @@ def uploadImage(request):
 
         if status == 1:
             return JsonResponse({'code': 201, 'msg': '不是我要的格式'})
-        
+
         if status == 2:
             return JsonResponse({'code': 201, 'msg': '上传失败'})
 
