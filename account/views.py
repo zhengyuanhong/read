@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from utils.qiniu import uploadQiniu
 from utils.util import get_token, de_token, formateTime, random_str, uploadImg
-from celery_task.task import sendMail,sendResetPassUrl
+from celery_task.task import sendMail, sendResetPassUrl
 from django.core.cache import cache
 import os
 import math
@@ -28,10 +28,24 @@ def accountUser(request, userId):
 
 def accountUserComment(request):
     if request.method == 'GET':
-        userComment = comments.objects.filter(
-            comm_uid=request.GET.get('userid')).all().order_by('-createTime')
+        page = int(request.GET.get('page', 1))
+        comm_uid = request.GET.get('userid')
+        query = comments.objects.filter(comm_uid=comm_uid)
 
         data = []
+        context = {}
+        if page > query.count():
+            context['code'] = 200
+            context['status'] = 'success'
+            context['data'] = data
+            return JsonResponse(context)
+
+        limit = 1
+        offset_a = (page-1) * limit
+        offset_b = page*limit
+
+        userComment = query.all().order_by('-createTime')[offset_a:offset_b]
+
         for u in userComment:
             temp = {}
             temp['article_id'] = u.aid.id
@@ -40,7 +54,6 @@ def accountUserComment(request):
                 str(u.createTime.strftime("%Y-%m-%d %H:%M:%S")))
             data.append(temp)
 
-        context = {}
         context['code'] = 200
         context['status'] = 'success'
         context['data'] = data
@@ -49,10 +62,26 @@ def accountUserComment(request):
 
 def accountUserArticle(request):
     if request.method == 'GET':
-        userArticle = article.objects.filter(uid=request.GET.get(
-            'userid')).filter(is_show=True).all().order_by('-createTime')
+        page = int(request.GET.get('page', 1))
+        uid = request.GET.get('userid')
+
+        query = article.objects.filter(uid=uid).filter(is_show=True)
 
         data = []
+        context = {}
+        if page > query.count():
+            context = {}
+            context['code'] = 200
+            context['status'] = 'success'
+            context['data'] = data
+            return JsonResponse(context)
+
+        limit = 1
+        offset_a = (page-1) * limit
+        offset_b = page*limit
+
+        userArticle = query.all().order_by('-createTime')[offset_a:offset_b]
+
         for u in userArticle:
             temp = {}
             temp['id'] = u.id
@@ -63,12 +92,13 @@ def accountUserArticle(request):
             temp['book_name'] = u.category.name
             data.append(temp)
 
-        context = {}
         context['code'] = 200
         context['status'] = 'success'
         context['data'] = data
         return JsonResponse(context)
 # 登陆
+
+
 def accountLogin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -93,6 +123,8 @@ def accountLogin(request):
     return render(request, 'account/login.html')
 
 # 注册
+
+
 def accountRegister(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -129,14 +161,20 @@ def accountRegister(request):
     return render(request, 'account/reg.html')
 
 # 邮箱发送提醒
+
+
 def emailTip(request):
     return render(request, 'account/verif.html')
 
 # 邮箱验证过期
+
+
 def verifEmail(request):
     return render(request, 'account/verif_expire.html')
 
 # 账号激活验证
+
+
 def verif(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -173,6 +211,8 @@ def verif(request):
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
 
 # 登出
+
+
 def accountLoginOut(request):
     logout(request)
     return HttpResponseRedirect('/')
@@ -202,6 +242,8 @@ def setPassword(request):
             return JsonResponse({'code': 200, 'msg': '修改成功'})
 
 # 重置密码
+
+
 def resetPassword(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -242,6 +284,8 @@ def resetPassword(request):
         return JsonResponse({'code': 200, 'msg': '修改成功'})
 
 # 发送重置密码链接
+
+
 def sendResetPassword(request):
     if request.method == 'GET':
         return render(request, 'account/reset_pass.html', {'flag': True, 'tip': '请输入正确的邮箱地址（发送邮箱过程可能会有点长，请耐心等待）'})
@@ -262,6 +306,8 @@ def accountSet(request):
     return render(request, 'account/set.html')
 
 # 修改个人信息
+
+
 def setInfo(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -311,6 +357,8 @@ def getMessage(request):
     return render(request, 'account/message.html')
 
 # 获取信息
+
+
 def getMsg(request):
     if request.method == 'GET':
         message = notify.objects.filter(
@@ -333,6 +381,8 @@ def getMsg(request):
         return JsonResponse(context)
 
 # 删除信息
+
+
 def delMsg(request):
     if request.method == 'GET':
         notify_id = request.GET.get('id', None)

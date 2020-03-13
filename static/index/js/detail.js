@@ -4,12 +4,12 @@ layui.use(['jquery', 'form'], function () {
     // 文章详情
     var article = $('#article_detail').text()
     $('#article_detail').html(article)
+    var length = $('#jieda > li').length
 
-    for (var i = parseInt("{{data|length}}"); i > 0; i--) {
+    for (var i = parseInt(length); i > 0; i--) {
       var reply = $(".reply_content[data-id=" + i + "]").text();
       $(".reply_content[data-id=" + i + "]").html(reply);
     }
-
 
     //回复功能
     $('span.reply_btn').click(function () {
