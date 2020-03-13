@@ -30,7 +30,7 @@ def accountUserComment(request):
     if request.method == 'GET':
         page = int(request.GET.get('page', 1))
         comm_uid = request.GET.get('userid')
-        query = comments.objects.filter(comm_uid=comm_uid)
+        query = comments.objects.filter(comm_uid_id=comm_uid)
 
         data = []
         context = {}
@@ -65,7 +65,7 @@ def accountUserArticle(request):
         page = int(request.GET.get('page', 1))
         uid = request.GET.get('userid')
 
-        query = article.objects.filter(uid=uid).filter(is_show=True)
+        query = article.objects.filter(uid_id=uid).filter(is_show=True)
 
         data = []
         context = {}
