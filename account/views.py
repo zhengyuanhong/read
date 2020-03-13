@@ -40,7 +40,7 @@ def accountUserComment(request):
             context['data'] = data
             return JsonResponse(context)
 
-        limit = 1
+        limit = 20 #最大显示数量
         offset_a = (page-1) * limit
         offset_b = page*limit
 
@@ -76,7 +76,7 @@ def accountUserArticle(request):
             context['data'] = data
             return JsonResponse(context)
 
-        limit = 1
+        limit = 20 #最大显示数量
         offset_a = (page-1) * limit
         offset_b = page*limit
 
