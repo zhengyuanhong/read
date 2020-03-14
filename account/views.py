@@ -207,12 +207,11 @@ def verif(request):
         # TODO 邮箱验证
         userinfo = {'email': email}
         verif_code = get_token(userinfo)
-        sendVerif(verif_code, email)
+        # sendVerif(verif_code, email)
+        sendMail.delay(verif_code, email)
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
 
 # 登出
-
-
 def accountLoginOut(request):
     logout(request)
     return HttpResponseRedirect('/')
