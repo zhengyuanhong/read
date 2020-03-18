@@ -161,20 +161,14 @@ def accountRegister(request):
     return render(request, 'account/reg.html')
 
 # 邮箱发送提醒
-
-
 def emailTip(request):
     return render(request, 'account/verif.html')
 
 # 邮箱验证过期
-
-
 def verifEmail(request):
     return render(request, 'account/verif_expire.html')
 
 # 账号激活验证
-
-
 def verif(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -380,8 +374,6 @@ def getMsg(request):
         return JsonResponse(context)
 
 # 删除信息
-
-
 def delMsg(request):
     if request.method == 'GET':
         notify_id = request.GET.get('id', None)

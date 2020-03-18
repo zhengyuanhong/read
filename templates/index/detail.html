@@ -29,8 +29,8 @@
             {% if author.id == request.user.id %}
             <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a
                 href="/detail/edit?aid={{detail.id}}">编辑此贴</a></span>
-            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a id='delete' data="{{detail.id}}"
-                href="#">删除此贴</a></span>
+            <!-- <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a id='delete' data="{{detail.id}}"
+                href="#">删除此贴</a></span> -->
             {% endif %}
           </div>
         </div>
