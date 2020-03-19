@@ -89,7 +89,7 @@ def accountUserArticle(request):
             temp['time'] = formateTime(
                 str(u.createTime.strftime("%Y-%m-%d %H:%M:%S")))
             temp['comm_num'] = u.article.count()
-            temp['book_name'] = u.category.name
+            temp['book_name'] = u.category.name if u.category else '综合'
             data.append(temp)
 
         context['code'] = 200
