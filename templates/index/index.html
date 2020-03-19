@@ -94,7 +94,10 @@
 
       <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
         <h3 class="fly-panel-title">最近登陆</h3>
-        <dl id='user_login'>
+        <dl>
+          {% for value in user_login %}
+          <dd><a href='account/u/{{value.id}}'><img src='{{value.avatar}}'><i>{{value.username}}</i></a></dd>
+          {% endfor %}
         </dl>
       </div>
 

@@ -51,9 +51,12 @@ def index(request):
             temp['category_id'] = i.category.id if i.category else 0
             article_data.append(temp)
 
+        userLogin = siteUser.objects.all().order_by('-last_login')[0:16]
+
         context = {}
         context['article'] = article_data
         context['page'] = page
+        context['user_login'] = userLogin 
         context['cate'] = cate.objects.all()
         context['fineurl'] = fineLink.objects.all()
         # 查询 每本书名下的文章数量
@@ -235,20 +238,22 @@ def uploadImage(request):
     pass
 
 # 获取最近登陆的用户
+@login_required
 def getUserLogin(request):
     if request.method == 'GET':
-        userLogin = siteUser.objects.all().order_by('-last_login')[0:16]
+        pass
+        # userLogin = siteUser.objects.all().order_by('-last_login')[0:16] 
 
-        data = []
-        for u in userLogin:
-            temp = {}
-            temp['id'] = u.id
-            temp['username'] = u.username
-            temp['avatar'] = u.avatar
-            data.append(temp) 
+        # data = []
+        # for u in userLogin:
+        #     temp = {}
+        #     temp['id'] = u.id
+        #     temp['username'] = u.username
+        #     temp['avatar'] = u.avatar
+        #     data.append(temp) 
         
-        context = {}
-        context['code'] = 200
-        context['msg'] = 'sueecss'
-        context['data']=data
-        return JsonResponse(context) 
+        # context = {}
+        # context['code'] = 200
+        # context['msg'] = 'sueecss'
+        # context['data']=data
+        # return JsonResponse(context) 
