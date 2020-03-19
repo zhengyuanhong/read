@@ -222,13 +222,16 @@ def postReply(request):
         if userinfo:
             content = '<a href="/account/u/{userid}">@{username}</a> {content}'.format(
                 userid=userinfo.id, username=userinfo.username, content=contentlist[1:][0])
+        
+            if request.user.id == userinfo.id:
+                return JsonResponse({'code': 201, 'msg': '不能给自己评论'})
 
         comments.objects.create(
             aid_id=aid, comm_uid_id=request.user.id, comm_content=content)
 
         # 增加评论积分
         addJiFen(request, settings.ADD_REPLAY_JIFEN)
-        return JsonResponse({'code': 200, 'msg': '发布成功'})
+        return JsonResponse({'code': 200, 'msg': '评论成功'})
 
 
 @login_required
