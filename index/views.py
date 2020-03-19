@@ -172,8 +172,8 @@ def editArticle(request):
 
         context = {}
         context['id'] = detail.id
-        context['category_name'] = detail.category.name
-        context['category_id'] = detail.category.id
+        context['category_name'] = detail.category.name if detail.category else '综合' 
+        context['category_id'] = detail.category.id if detail.category else None
         context['title'] = detail.title
         context['content'] = detail.content
         return render(request, 'index/edit.html', context)

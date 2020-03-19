@@ -9,7 +9,12 @@
       <div class="fly-panel detail-box">
         <h1>{{detail.title}}</h1>
         <div class="fly-detail-info">
-          <span style="color:gray;">书名：《{{detail.category.name}}》</span>
+          {% if detail.category %}
+          <span style="color:gray;">来自书名：《{{detail.category.name}}》</span>
+          {% else %}
+          <span style="color:gray;">来自书名：《综合》</span>
+          {% endif %}
+
           <span class="fly-list-nums">
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> {{comm_num}}</a>
           </span>
@@ -99,7 +104,8 @@
           </form>
         </div>
         {% else %}
-        <div style="margin: 0 auto;text-align: center;padding: 40px 0;border: 1px solid gray;"><a href="/account/login" class="layui-btn layui-btn-primary">登陆可评论</a></div>
+        <div style="margin: 0 auto;text-align: center;padding: 40px 0;border: 1px solid gray;"><a href="/account/login"
+            class="layui-btn layui-btn-primary">登陆可评论</a></div>
         {% endif %}
       </div>
     </div>
@@ -139,8 +145,7 @@
           官方推荐
         </div>
         <div class="fly-panel-main">
-          <a href="{{detail.category.book_url}}" target="_blank" class="fly-zanzhu"
-            time-limit="2017.09.25-2099.01.01"
+          <a href="{{detail.category.book_url}}" target="_blank" class="fly-zanzhu" time-limit="2017.09.25-2099.01.01"
             style="background-color: #009688; background-image: linear-gradient(to right,#009688,#5FB878);">《{{detail.category.name}}》</a>
         </div>
       </div>
