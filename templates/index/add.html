@@ -17,7 +17,8 @@
                 <div class="layui-col-md5">
                   <label class="layui-form-label">正在读</label>
                   <div class="layui-input-block">
-                    <select lay-verify="required" name="category" lay-filter="column">
+                    <select lay-verify="required"  name="category" lay-filter="column">
+                      <option></option>
                       {% for i in cate %}
                       <option value="{{i.id}}">《{{i.name}}》</option>
                       {% endfor %}

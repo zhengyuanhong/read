@@ -77,7 +77,7 @@
 
       <div class="fly-panel">
         <div class="fly-panel-title">
-          创建书籍
+          创建书名（不可修改和删除）
         </div>
         <div class="fly-panel-main">
           <form class="layui-form">
@@ -101,19 +101,16 @@
         </dl>
       </div>
 
-      {% if cate %}
       <div class="fly-panel fly-link">
-        <h3 class="fly-panel-title">书籍列表</h3>
+        <h3 class="fly-panel-title">书名列表</h3>
         <dl id="book_list" class="fly-panel-main">
-          <dd><a href="/">所有书籍</a></dd>
+          <dd><a href="/">所有书名</a></dd>
           {% for i in cate %}
           <dd><a href="?category={{i.id}}">{{i.name}}</a>
           <dd>
            {% endfor %}
-
         </dl>
       </div>
-      {% endif %}
 
       <dl class="fly-panel fly-list-one">
         <dt id="hot_book" class="fly-panel-title">书籍热读榜</dt>
