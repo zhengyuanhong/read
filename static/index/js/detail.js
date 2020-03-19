@@ -24,7 +24,6 @@ layui.use(['jquery', 'form'], function () {
         method: 'post',
         data: data.field,
         dataType: 'JSON',
-        async : false,
         success: function (res) {
           $('#L_content').val('')
           if (res.code == 200) {
@@ -47,7 +46,6 @@ layui.use(['jquery', 'form'], function () {
           id:aid
         },
         dataType: 'JSON',
-        async : false,
         success: function (res) {
           if (res.code == 200) {
             layer.msg((res.msg));

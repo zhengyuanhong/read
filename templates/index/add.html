@@ -7,12 +7,11 @@
       <div class="layui-tab layui-tab-brief" lay-filter="user">
         <ul class="layui-tab-title">
           <li class="layui-this">发表新文章</li>
-          <li>创建新书栏</li>
         </ul>
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
-          <!-- tab 1 -->
+
           <div class="layui-tab-item layui-show">
-            <form action="#">
+            <form class="layui-form" action="#">
               {% csrf_token %}
               <div class="layui-row layui-col-space15 layui-form-item">
                 <div class="layui-col-md5">
@@ -43,34 +42,8 @@
                 <button class="layui-btn" lay-filter="add" lay-submit>立即发布</button>
               </div>
             </form>
-            <!-- {% if num != 0 %}
-            <p style="color: grey;">*你今天可以发布{{num}}篇文章</p>
-            {% endif %} -->
           </div>
-          <!-- tab 1 -->
-          <!-- tab 2 -->
-          <div class="layui-tab-item">
-            <form action="#">
-              {% csrf_token %}
-              <div class="layui-form-item">
-                <div class="layui-row layui-col-space15 layui-form-item">
-                  <div class="layui-col-md6">
-                    <label class="layui-form-label">准备阅读</label>
-                    <div class="layui-input-block">
-                      <input type="text" name="book_name" maxlength="15" required lay-verify="required" placeholder="填入书名"
-                        autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">已有的书名不能被创建，创建后不能删除</div>
-                  </div>
-                </div>
-              </div>
 
-              <div class="layui-form-item">
-                <button class="layui-btn" lay-submit lay-filter="create">立即创建</button>
-              </div>
-            </form>
-          </div>
-          <!-- tab2 -->
         </div>
       </div>
     </div>

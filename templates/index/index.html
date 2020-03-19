@@ -74,6 +74,24 @@
           <p>{{request.web.welcome}}</p>
         </div>
       </div>
+
+      <div class="fly-panel">
+        <div class="fly-panel-title">
+          创建书籍
+        </div>
+        <div class="fly-panel-main">
+          <form class="layui-form">
+            <div style="display: flex;">
+              <input id="input_val" type="text" value='' autocomplete="off" name="book_name"
+                lay-verify="required" placeholder="输入书名" class="layui-input">
+              <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+              <div style="width: 20px;"></div>
+              <button class="layui-btn layui-btn-green" lay-submit lay-filter="create">创建</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
         <h3 class="fly-panel-title">最近登陆</h3>
         <dl id='rich_rank'>
@@ -83,23 +101,22 @@
         </dl>
       </div>
 
+      {% if cate %}
       <div class="fly-panel fly-link">
         <h3 class="fly-panel-title">书籍列表</h3>
-        <dl class="fly-panel-main">
+        <dl id="book_list" class="fly-panel-main">
           <dd><a href="/">所有书籍</a></dd>
           {% for i in cate %}
           <dd><a href="?category={{i.id}}">{{i.name}}</a>
           <dd>
-            {% endfor %}
+           {% endfor %}
 
-            {% if not cate %}
-            <text style="color: grey;">暂无~</text>
-            {% endif %}
         </dl>
       </div>
+      {% endif %}
 
       <dl class="fly-panel fly-list-one">
-        <dt class="fly-panel-title">书籍热读榜</dt>
+        <dt id="hot_book" class="fly-panel-title">书籍热读榜</dt>
         {% for i in hot %}
         <dd>
           <a href="?category={{i.id}}">有{{i.post_num}}篇关于《{{i.name}}》的文章</a>
@@ -123,4 +140,8 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'index/js/index.js' %}"></script>
 {% endblock %}

@@ -31,34 +31,12 @@ layui.use(['layedit', 'form', 'jquery', 'element'], function () {
         method: 'post',
         data: data.field,
         dataType: 'JSON',
-        async: false,
         success: function (res) {
           if (res.code == 200) {
             layer.msg((res.msg));
             setTimeout(function () {
               window.location.href = "/"
             }, 500)
-          } else {
-            layer.msg(res.msg);
-          }
-        }
-      });
-      return false
-    })
-
-    form.on('submit(create)', function (data) {
-      $.ajax({
-        url: 'create',
-        method: 'post',
-        data: data.field,
-        dataType: 'JSON',
-        async: false,
-        success: function (res) {
-          if (res.code == 200) {
-            layer.msg((res.msg));
-            setTimeout(function(){
-                window.location.reload()
-            })
           } else {
             layer.msg(res.msg);
           }

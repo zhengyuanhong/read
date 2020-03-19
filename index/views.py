@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from .models import article, comments, category as cate, notify, fineLink
 from django.contrib.auth.decorators import login_required
 from utils.util import addJiFen, reduceJiFen, formateTime, getlevel
+from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.db.models import Count
 # Create your views here.
@@ -111,8 +112,8 @@ def createCategory(request):
         if exits:
             return JsonResponse({'code': 201, 'msg': '已经存在'})
 
-        cate.objects.create(name=book_name, create_user=request.user)
-        return JsonResponse({'code': 200, 'msg': '创建成功'})
+        name = cate.objects.create(name=book_name, create_user=request.user)
+        return JsonResponse({'code': 200, 'msg': '创建成功','data':[{'id':name.id,'name':name.name}]})
 
 
 @login_required
