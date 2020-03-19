@@ -97,8 +97,6 @@ def accountUserArticle(request):
         context['data'] = data
         return JsonResponse(context)
 # 登陆
-
-
 def accountLogin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -155,7 +153,7 @@ def accountRegister(request):
         sendMail.delay(verif_code, email)
 
         siteUser.objects.create_user(
-            username=username, email=email, password=password, is_verif=False)
+            username=username, email=email,avatar=settings.HOST_URL+settings.DEFAULT_AVATAR, password=password, is_verif=False)
 
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
     return render(request, 'account/reg.html')
