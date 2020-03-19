@@ -15,7 +15,7 @@ layui.use(['layedit', 'form', 'jquery', 'element'], function () {
         , 'center' //居中对齐
         , 'right' //右对齐
         , 'link' //超链接
-        , 'face' //表情
+        // , 'face' //表情
       ]
     })
 
