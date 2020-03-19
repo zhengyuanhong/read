@@ -18,7 +18,7 @@ from django.views.static import serve
 import account
 from django.contrib import admin
 from django.urls import path, include, re_path
-from index.views import index, getUserRank, detail, \
+from index.views import index, getUserLogin, detail, \
     postAdd, uploadImage, postReply, editArticle,\
     deleteArticle, index_page_not_found, createCategory
 
@@ -33,7 +33,7 @@ urlpatterns = [
     path('create', createCategory, name='createCategory'),
     path('upload', uploadImage, name='uploadImage'),
     path('account/', include('account.urls')),
-    path('rank', getUserRank),
+    path('user-login', getUserLogin),
     re_path(r'^media/(?P<path>.*)$', serve,
             {'document_root': settings.MEDIA_ROOT})
 ]
