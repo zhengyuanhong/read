@@ -42,5 +42,4 @@ layui.use(['layedit', 'form', 'jquery'], function () {
       });
       return false
     })
-
   });
