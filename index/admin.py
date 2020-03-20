@@ -13,8 +13,8 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(article)
 class articleAdmin(admin.ModelAdmin):
-    list_display=('id','title','uid','article_type','is_top','content','category','is_show','updateTime','createTime')
-    list_display_links = ('title','content')
+    list_display=('id','title','uid','article_type','is_top','category','is_show','updateTime','createTime')
+    list_display_links = ('title',)
     list_editable = ('is_top','category','article_type')
     search_fields = ('title','content','article_type')
 
