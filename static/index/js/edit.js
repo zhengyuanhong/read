@@ -29,7 +29,6 @@ layui.use(['layedit', 'form', 'jquery'], function () {
         method: 'post',
         data: data.field,
         dataType: 'JSON',
-        async:false,
         success: function (res) {
           if (res.code == 200) {
             layer.msg((res.msg));
