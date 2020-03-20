@@ -14,7 +14,7 @@ def comment_notify(sender, instance, created, **kwargs):
         author = articleInfo.uid
         title = articleInfo.title
         # 文章作者不给消息通知
-        if comm_uid != articleInfo.uid_id:
+        if comm_uid != articleInfo.uid_id and not to_comm_uid:
             content = '你发布的  ”'+title+'“ 新增一条评论'
             notify.objects.create(is_read=0, uid=author, content=content, aid=aid)
 
