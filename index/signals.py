@@ -7,7 +7,9 @@ from django.dispatch import receiver
 def comment_notify(sender, instance, created, **kwargs):
     if created:
         aid = instance.aid_id
+        comm_uid = instance.comm_uid_id
         articleInfo = article.objects.filter(id=aid).first()
         author = articleInfo.uid
         title = articleInfo.title
-        notify.objects.create(is_read=0, uid=author, content=title, aid=aid)
+        if comm_uid != articleInfo.uid_id:
+            notify.objects.create(is_read=0, uid=author, content=title, aid=aid)
