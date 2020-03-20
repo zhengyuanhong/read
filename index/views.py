@@ -118,29 +118,6 @@ def createCategory(request):
 @login_required
 def postAdd(request):
     if request.method == 'GET':
-        # 获取发布文章次数
-        # res = getlevel(request)
-        # 如果获取次数，则限制次数
-        # num = 0
-        # if res != 0:
-        #     now = datetime.datetime.now()
-        #     count = article.objects.filter(uid=request.user).filter(
-        #         createTime__year=now.year, createTime__month=now.month, createTime__day=now.day).count()
-            # 每个账号每天只能发布res篇文章
-            # if count >= res:
-            #     return render(request, 'refuse_write.html', {'tip': '你今天已经发布了{}篇文章，明天再来吧'.format(res)})
-
-            # 数字转中文
-        #     intTozh = {
-        #         1: '一',
-        #         2: '两',
-        #         3: '三',
-        #         4: '四',
-        #         5: '五',
-        #     }
-        #     num = intTozh[res-count]
-        # else:
-        #     num = 0
         category = cate.objects.all()
         return render(request, 'index/add.html', {'cate': category})
 

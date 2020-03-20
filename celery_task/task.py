@@ -4,6 +4,30 @@ from django.core.mail import send_mail
 
 
 @app.task
+def regNotfiy(username, email):
+    subject = settings.WEB_NAME+'注册通知'
+    message = ''
+
+    html_template = '''
+      注册名称：{username}；
+      <br>
+      注册邮箱：{email}；         
+      '''
+
+    html_message = html_template.format(username=username, email=email)
+
+    email_list = [settings.EMAIL_HOST_USER]
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=email_list,
+        html_message=html_message
+    )
+
+
+@app.task
 def sendMail(verif_code, email):
     subject = '欢迎注册'+settings.WEB_NAME
 

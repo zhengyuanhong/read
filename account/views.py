@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from utils.qiniu import uploadQiniu
 from utils.util import get_token, de_token, formateTime, random_str, uploadImg
-from celery_task.task import sendMail, sendResetPassUrl
+from celery_task.task import sendMail, sendResetPassUrl, regNotfiy
 from django.core.cache import cache
 import os
 import math
@@ -40,7 +40,7 @@ def accountUserComment(request):
             context['data'] = data
             return JsonResponse(context)
 
-        limit = 20 #最大显示数量
+        limit = 20  # 最大显示数量
         offset_a = (page-1) * limit
         offset_b = page*limit
 
@@ -76,7 +76,7 @@ def accountUserArticle(request):
             context['data'] = data
             return JsonResponse(context)
 
-        limit = 20 #最大显示数量
+        limit = 20  # 最大显示数量
         offset_a = (page-1) * limit
         offset_b = page*limit
 
@@ -97,6 +97,8 @@ def accountUserArticle(request):
         context['data'] = data
         return JsonResponse(context)
 # 登陆
+
+
 def accountLogin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -149,24 +151,31 @@ def accountRegister(request):
         # TODO 邮箱验证
         userinfo = {'email': email}
         verif_code = get_token(userinfo)
-        # sendVerif(verif_code, email)
         sendMail.delay(verif_code, email)
+        # 通知管理员
+        regNotfiy.delay(username, email)
 
         siteUser.objects.create_user(
-            username=username, email=email,avatar=settings.HOST_URL+settings.DEFAULT_AVATAR, password=password, is_verif=False)
+            username=username, email=email, avatar=settings.HOST_URL+settings.DEFAULT_AVATAR, password=password, is_verif=False)
 
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
     return render(request, 'account/reg.html')
 
 # 邮箱发送提醒
+
+
 def emailTip(request):
     return render(request, 'account/verif.html')
 
 # 邮箱验证过期
+
+
 def verifEmail(request):
     return render(request, 'account/verif_expire.html')
 
 # 账号激活验证
+
+
 def verif(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -204,6 +213,8 @@ def verif(request):
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
 
 # 登出
+
+
 def accountLoginOut(request):
     logout(request)
     return HttpResponseRedirect('/')
@@ -372,6 +383,8 @@ def getMsg(request):
         return JsonResponse(context)
 
 # 删除信息
+
+
 def delMsg(request):
     if request.method == 'GET':
         notify_id = request.GET.get('id', None)
