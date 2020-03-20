@@ -47,9 +47,9 @@ def index(request):
             temp['user'] = i.uid
             temp['createTime'] = formateTime(
                 str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
-            temp['comm_num'] = i.article.filter(is_show=True).count() 
+            temp['comm_num'] = i.article.filter(is_show=True).count()
             temp['is_top'] = i.is_top
-            temp['category'] = i.category.name if i.category else None 
+            temp['category'] = i.category.name if i.category else None
             temp['category_id'] = i.category.id if i.category else 0
             article_data.append(temp)
 
@@ -79,7 +79,7 @@ def getAdminArticle():
         admin_temp['title'] = i.title
         admin_temp['user'] = i.uid
         admin_temp['createTime'] = formateTime(
-                str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
+            str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
         admin_temp['comm_num'] = i.article.filter(is_show=True).count()
         admin_temp['article_type'] = types[i.article_type-1]
         admin_article.append(admin_temp)
@@ -96,7 +96,7 @@ def detail(request, article_id):
     if not detail.is_show:
         return render(request, '404.html', {'tip': '该文章已违规，已被管理员删除'})
 
-    comment = comments.objects.filter(aid=detail,is_show=True)
+    comment = comments.objects.filter(aid=detail, is_show=True)
     comm_num = comment.count()  # 获取评论条数
     author = detail.uid  # 获取作者信息
 
@@ -172,7 +172,7 @@ def editArticle(request):
         detail = article.objects.filter(
             id=request.GET.get('aid'), uid_id=request.user.id).first()
 
-        article_type_list = {'普通':0,'公告':1,'通知':2,'讨论':3}
+        article_type_list = {'普通': 0, '公告': 1, '通知': 2, '讨论': 3}
 
         context = {}
         context['id'] = detail.id
@@ -238,7 +238,7 @@ def postReply(request):
                 return JsonResponse({'code': 201, 'msg': '不能给自己评论'})
 
         comments.objects.create(
-            aid_id=aid, comm_uid_id=request.user.id, comm_content=content)
+            aid_id=aid, comm_uid_id=request.user.id, to_comm_uid_id=userinfo.id if userinfo else None, comm_content=content)
 
         # 增加评论积分
         addJiFen(request, settings.ADD_REPLAY_JIFEN)
