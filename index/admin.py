@@ -15,7 +15,7 @@ class CommentAdmin(admin.ModelAdmin):
 class articleAdmin(admin.ModelAdmin):
     list_display=('id','title','uid','article_type','is_top','category','is_show','updateTime','createTime')
     list_display_links = ('title',)
-    list_editable = ('is_top','category','article_type')
+    list_editable = ('is_top','is_show','category','article_type')
     search_fields = ('title','content','article_type')
 
 @admin.register(notify)
