@@ -40,7 +40,7 @@ class comments(models.Model):
         verbose_name_plural = verbose_name = '评论'
 
     def __str__(self):
-        return self.aid
+        return str(self.aid)
 
 
 class notify(models.Model):
