@@ -47,7 +47,7 @@ def index(request):
             temp['user'] = i.uid
             temp['createTime'] = formateTime(
                 str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
-            temp['comm_num'] = i.article.count()
+            temp['comm_num'] = i.article.filter(is_show=True).count() 
             temp['is_top'] = i.is_top
             temp['category'] = i.category.name if i.category else '综合'
             temp['category_id'] = i.category.id if i.category else 0
@@ -80,7 +80,7 @@ def getAdminArticle():
         admin_temp['user'] = i.uid
         admin_temp['createTime'] = formateTime(
                 str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
-        admin_temp['comm_num'] = i.article.count()
+        admin_temp['comm_num'] = i.article.filter(is_show=True).count()
         admin_temp['article_type'] = types[i.article_type-1]
         admin_article.append(admin_temp)
 
@@ -96,7 +96,7 @@ def detail(request, article_id):
     if not detail.is_show:
         return render(request, '404.html', {'tip': '该文章已违规，已被管理员删除'})
 
-    comment = comments.objects.filter(aid=detail)
+    comment = comments.objects.filter(aid=detail,is_show=True)
     comm_num = comment.count()  # 获取评论条数
     author = detail.uid  # 获取作者信息
 

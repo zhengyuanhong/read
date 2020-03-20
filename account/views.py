@@ -30,7 +30,7 @@ def accountUserComment(request):
     if request.method == 'GET':
         page = int(request.GET.get('page', 1))
         comm_uid = request.GET.get('userid')
-        query = comments.objects.filter(comm_uid_id=comm_uid)
+        query = comments.objects.filter(comm_uid_id=comm_uid,is_show=True)
 
         data = []
         context = {}
@@ -50,6 +50,7 @@ def accountUserComment(request):
             temp = {}
             temp['article_id'] = u.aid.id
             temp['article_title'] = u.aid.title
+            temp['comm_content'] = u.comm_content
             temp['time'] = formateTime(
                 str(u.createTime.strftime("%Y-%m-%d %H:%M:%S")))
             data.append(temp)

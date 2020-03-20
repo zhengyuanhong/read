@@ -33,6 +33,7 @@ class comments(models.Model):
     comm_uid = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='评论者',
                                  on_delete=models.CASCADE, related_name='comment_user_id')
     comm_content = models.TextField('评论内容', default='')
+    is_show = models.BooleanField('是否显示',default=True)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 

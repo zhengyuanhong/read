@@ -9,7 +9,9 @@ class categoryAdmin(admin.ModelAdmin):
 
 @admin.register(comments)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id','aid','comm_uid','comm_content','updateTime','createTime')
+    list_display = ('id','aid','comm_uid','comm_content','is_show','updateTime','createTime')
+    list_display_links = ('comm_content','aid')
+    list_editable = ('is_show',)
 
 @admin.register(article)
 class articleAdmin(admin.ModelAdmin):
