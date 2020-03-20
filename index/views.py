@@ -40,6 +40,8 @@ def index(request):
         article_data = []
         for i in page:
             temp = {}
+            if i.article_type:
+                continue
             temp['id'] = i.id
             temp['title'] = i.title
             temp['user'] = i.uid
@@ -51,26 +53,9 @@ def index(request):
             temp['category_id'] = i.category.id if i.category else 0
             article_data.append(temp)
 
-        # 获取管理员发布的文章
-        types = ['公告', '通知' , '讨论']
-        admin_article = []
-        admin_article_data = article.objects.filter(
-            is_show=True, article_type__isnull=False).all().order_by('-createTime')
-
-        for i in admin_article_data:
-            admin_temp = {}
-            admin_temp['id'] = i.id
-            admin_temp['title'] = i.title
-            admin_temp['user'] = i.uid
-            admin_temp['createTime'] = formateTime(
-                str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
-            admin_temp['comm_num'] = i.article.count()
-            admin_temp['article_type'] = types[i.article_type-1]
-            admin_article.append(admin_temp)
-
         context = {}
         context['article'] = article_data
-        context['admin_article'] = admin_article
+        context['admin_article'] = getAdminArticle()
         context['page'] = page
         context['user_login'] = siteUser.objects.all().order_by(
             '-last_login')[0:16]
@@ -80,6 +65,26 @@ def index(request):
         context['hot'] = cate.objects.annotate(post_num=Count('article')).filter(
             post_num__gt=0).order_by('-post_num')[0:10]
         return render(request, 'index/index.html', context)
+
+
+def getAdminArticle():
+    types = ['公告', '通知', '讨论']
+    admin_article = []
+    admin_article_data = article.objects.filter(
+        is_show=True, article_type__isnull=False).all().order_by('-createTime')
+
+    for i in admin_article_data:
+        admin_temp = {}
+        admin_temp['id'] = i.id
+        admin_temp['title'] = i.title
+        admin_temp['user'] = i.uid
+        admin_temp['createTime'] = formateTime(
+                str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
+        admin_temp['comm_num'] = i.article.count()
+        admin_temp['article_type'] = types[i.article_type-1]
+        admin_article.append(admin_temp)
+
+    return admin_article
 
 
 def detail(request, article_id):
@@ -178,7 +183,7 @@ def editArticle(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        article_type = int(request.POST.get('article_type','0'))
+        article_type = int(request.POST.get('article_type', '0'))
 
         if not article_type:
             article_type = None
@@ -194,7 +199,7 @@ def editArticle(request):
 
         detail.title = title
         detail.content = content
-        detail.article_type = article_type 
+        detail.article_type = article_type
         detail.save()
         return JsonResponse({'code': 200, 'msg': '更新成功'})
 

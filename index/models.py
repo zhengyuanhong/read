@@ -8,6 +8,7 @@ class article(models.Model):
         (2,'通知'),
         (3,'讨论'),
     )
+
     title = models.CharField('标题', max_length=50)
     content = models.TextField('内容')
     category = models.ForeignKey('category',on_delete=models.SET_NULL,null=True,blank=True,verbose_name='分类')
