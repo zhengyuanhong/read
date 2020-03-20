@@ -3,6 +3,11 @@ from django.conf import settings
 
 
 class article(models.Model):
+    select_type = (
+        (1,'公告'),
+        (2,'通知'),
+        (3,'讨论'),
+    )
     title = models.CharField('标题', max_length=50)
     content = models.TextField('内容')
     category = models.ForeignKey('category',on_delete=models.SET_NULL,null=True,blank=True,verbose_name='分类')
@@ -10,6 +15,7 @@ class article(models.Model):
                             on_delete=models.CASCADE, related_name='user')
     is_show = models.BooleanField('是否显示',default=True)
     is_top = models.IntegerField('优先级',default=0)
+    article_type = models.IntegerField('文章类型',choices=select_type,null=True,default=None,blank=True)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 

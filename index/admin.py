@@ -13,10 +13,10 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(article)
 class articleAdmin(admin.ModelAdmin):
-    list_display=('id','title','uid','content','category','is_top','is_show','updateTime','createTime')
+    list_display=('id','title','uid','article_type','is_top','content','category','is_show','updateTime','createTime')
     list_display_links = ('title','content')
-    list_editable = ('is_top','category')
-    search_fields = ('title','content')
+    list_editable = ('is_top','category','article_type')
+    search_fields = ('title','content','article_type')
 
 @admin.register(notify)
 class notifyAdmin(admin.ModelAdmin):

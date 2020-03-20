@@ -51,12 +51,29 @@ def index(request):
             temp['category_id'] = i.category.id if i.category else 0
             article_data.append(temp)
 
-        userLogin = siteUser.objects.all().order_by('-last_login')[0:16]
+        # 获取管理员发布的文章
+        types = ['公告', '通知' , '讨论']
+        admin_article = []
+        admin_article_data = article.objects.filter(
+            is_show=True, article_type__isnull=False).all().order_by('-createTime')
+
+        for i in admin_article_data:
+            admin_temp = {}
+            admin_temp['id'] = i.id
+            admin_temp['title'] = i.title
+            admin_temp['user'] = i.uid
+            admin_temp['createTime'] = formateTime(
+                str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
+            admin_temp['comm_num'] = i.article.count()
+            admin_temp['article_type'] = types[i.article_type-1]
+            admin_article.append(admin_temp)
 
         context = {}
         context['article'] = article_data
+        context['admin_article'] = admin_article
         context['page'] = page
-        context['user_login'] = userLogin 
+        context['user_login'] = siteUser.objects.all().order_by(
+            '-last_login')[0:16]
         context['cate'] = cate.objects.all()
         context['fineurl'] = fineLink.objects.all()
         # 查询 每本书名下的文章数量
@@ -112,7 +129,7 @@ def createCategory(request):
             return JsonResponse({'code': 201, 'msg': '已经存在'})
 
         name = cate.objects.create(name=book_name, create_user=request.user)
-        return JsonResponse({'code': 200, 'msg': '创建成功','data':[{'id':name.id,'name':name.name}]})
+        return JsonResponse({'code': 200, 'msg': '创建成功', 'data': [{'id': name.id, 'name': name.name}]})
 
 
 @login_required
@@ -125,6 +142,10 @@ def postAdd(request):
         category = request.POST.get('category')
         title = request.POST.get('title')
         content = request.POST.get('content')
+        article_type = int(request.POST.get('article_type', '0'))
+
+        if not article_type:
+            article_type = None
 
         if not title:
             return JsonResponse({'code': 201, 'msg': '内容不能为空'})
@@ -133,7 +154,7 @@ def postAdd(request):
             return JsonResponse({'code': 201, 'msg': '内容不能为空'})
 
         article.objects.create(
-            category_id=category, title=title, content=content, uid=request.user)
+            category_id=category, title=title, content=content, uid=request.user, article_type=article_type)
         # 发布文章增加5个积分
         addJiFen(request, settings.ADD_JIFEN)
 
@@ -148,7 +169,7 @@ def editArticle(request):
 
         context = {}
         context['id'] = detail.id
-        context['category_name'] = detail.category.name if detail.category else '综合' 
+        context['category_name'] = detail.category.name if detail.category else '综合'
         context['category_id'] = detail.category.id if detail.category else None
         context['title'] = detail.title
         context['content'] = detail.content
@@ -157,6 +178,10 @@ def editArticle(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
+        article_type = int(request.POST.get('article_type','0'))
+
+        if not article_type:
+            article_type = None
 
         if not title:
             return JsonResponse({'code': 201, 'msg': '内容不能为空'})
@@ -169,6 +194,7 @@ def editArticle(request):
 
         detail.title = title
         detail.content = content
+        detail.article_type = article_type 
         detail.save()
         return JsonResponse({'code': 200, 'msg': '更新成功'})
 
@@ -198,7 +224,7 @@ def postReply(request):
         if userinfo:
             content = '<a href="/account/u/{userid}">@{username}</a> {content}'.format(
                 userid=userinfo.id, username=userinfo.username, content=contentlist[1:][0])
-        
+
             if request.user.id == userinfo.id:
                 return JsonResponse({'code': 201, 'msg': '不能给自己评论'})
 
@@ -219,7 +245,7 @@ def uploadImage(request):
 def getUserLogin(request):
     if request.method == 'GET':
         pass
-        # userLogin = siteUser.objects.all().order_by('-last_login')[0:16] 
+        # userLogin = siteUser.objects.all().order_by('-last_login')[0:16]
 
         # data = []
         # for u in userLogin:
@@ -227,10 +253,10 @@ def getUserLogin(request):
         #     temp['id'] = u.id
         #     temp['username'] = u.username
         #     temp['avatar'] = u.avatar
-        #     data.append(temp) 
-        
+        #     data.append(temp)
+
         # context = {}
         # context['code'] = 200
         # context['msg'] = 'sueecss'
         # context['data']=data
-        # return JsonResponse(context) 
+        # return JsonResponse(context)

@@ -16,6 +16,34 @@
         </div>
 
         <ul class="fly-list">
+          {% for a in admin_article %}
+          <li>
+            <a href="/account/u/{{a.user.id}}" class="fly-avatar">
+              <img src="{{a.user.avatar}}" alt="贤心">
+            </a>
+            <h2>
+              <a class="layui-badge">{{a.article_type}}</a>
+              <a href="/detail/{{a.id}}">
+                {{a.title}}
+              </a>
+            </h2>
+            <div class="fly-list-info">
+              <a href="/account/u/{{a.user.id}}" link>
+                <cite>{{a.user.username}}</cite>
+                <!-- <i class="layui-badge fly-badge-vip">{{i.user.jifen}}</i> -->
+              </a>
+              <span>{{a.createTime}}</span>
+              <span class="fly-list-nums">
+                <i class="iconfont icon-pinglun1" title="回答"></i> {{a.comm_num}}
+              </span>
+            </div>
+            <!-- <div class="fly-list-badge">
+              <span class="layui-badge-rim">
+                <a href="?category={{a.category_id}}" class='layui-this'>{{a.category}}</a>
+              </span>
+             </div> -->
+             </li> 
+             {% endfor %} 
           {% for i in article %}
           <li>
             <a href="/account/u/{{i.user.id}}" class="fly-avatar">
@@ -25,6 +53,7 @@
               {% if i.is_top > 0 %}
               <a class="layui-badge">置顶</a>
               {% endif %}
+
               <a href="/detail/{{i.id}}">
                 {{i.title}}
               </a>
@@ -82,8 +111,8 @@
         <div class="fly-panel-main">
           <form class="layui-form">
             <div style="display: flex;">
-              <input id="input_val" type="text" value='' autocomplete="off" name="book_name"
-                lay-verify="required" placeholder="输入书名" class="layui-input">
+              <input id="input_val" type="text" value='' autocomplete="off" name="book_name" lay-verify="required"
+                placeholder="输入书名" class="layui-input">
               <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
               <div style="width: 20px;"></div>
               <button class="layui-btn layui-btn-green" lay-submit lay-filter="create">创建</button>
@@ -108,18 +137,11 @@
           {% for i in cate %}
           <dd><a href="?category={{i.id}}">{{i.name}}</a>
           <dd>
-           {% endfor %}
+            {% endfor %}
         </dl>
       </div>
 
-      <dl class="fly-panel fly-list-one">
-        <dt id="hot_book" class="fly-panel-title">书籍热读榜</dt>
-        {% for i in hot %}
-        <dd>
-          <a href="?category={{i.id}}">有{{i.post_num}}篇关于《{{i.name}}》的文章</a>
-        </dd>
-        {% endfor %}
-      </dl>
+
 
       <div class="fly-panel fly-link">
         <h3 class="fly-panel-title">友情链接</h3>

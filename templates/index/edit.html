@@ -18,16 +18,16 @@
                 <div class="layui-col-md5">
                   <label class="layui-form-label">正在读</label>
                   <div class="layui-input-block">
-                    <select lay-verify="required"  lay-filter="column">
-                      <option selected='selected' >{{category_name}}</option>
+                    <select lay-verify="required" lay-filter="column">
+                      <option selected='selected'>{{category_name}}</option>
                     </select>
                   </div>
                 </div>
                 <div class="layui-col-md7">
                   <label for="L_title" class="layui-form-label">标题</label>
                   <div class="layui-input-block">
-                    <input type="text" id="L_title" name="title" maxlength="30" value="{{title}}" required lay-verify="required"
-                      autocomplete="off" class="layui-input">
+                    <input type="text" id="L_title" name="title" maxlength="30" value="{{title}}" required
+                      lay-verify="required" autocomplete="off" class="layui-input">
                   </div>
                 </div>
               </div>
@@ -37,6 +37,24 @@
                     style="display: none;">{{content}}</textarea>
                 </div>
               </div>
+
+              {% if request.user.is_superuser %}
+              <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label">内容类型</label>
+                  <div class="layui-input-inline" style="width: 190px;">
+                    <select name="article_type">
+                      <option value="0">普通</option>
+                      <option value="1">公告</option>
+                      <option value="2">通知</option>
+                      <option value="3">讨论</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+
               <div class="layui-form-item">
                 <input type="hidden" name="aid" value="{{id}}">
                 <button class="layui-btn" lay-filter="edit" lay-submit>立即更新</button>
