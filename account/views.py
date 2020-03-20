@@ -155,27 +155,23 @@ def accountRegister(request):
         # 通知管理员
         regNotfiy.delay(username, email)
 
+        import random
+        avatar = settings.HOST_URL+settings.DEFAULT_AVATAR.format(num=random.randint(0,9))
         siteUser.objects.create_user(
-            username=username, email=email, avatar=settings.HOST_URL+settings.DEFAULT_AVATAR, password=password, is_verif=False)
+            username=username, email=email, avatar=avatar, password=password, is_verif=False)
 
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
     return render(request, 'account/reg.html')
 
 # 邮箱发送提醒
-
-
 def emailTip(request):
     return render(request, 'account/verif.html')
 
 # 邮箱验证过期
-
-
 def verifEmail(request):
     return render(request, 'account/verif_expire.html')
 
 # 账号激活验证
-
-
 def verif(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -213,8 +209,6 @@ def verif(request):
         return JsonResponse({'code': 200, 'msg': '发送邮箱...'})
 
 # 登出
-
-
 def accountLoginOut(request):
     logout(request)
     return HttpResponseRedirect('/')
@@ -244,8 +238,6 @@ def setPassword(request):
             return JsonResponse({'code': 200, 'msg': '修改成功'})
 
 # 重置密码
-
-
 def resetPassword(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -286,8 +278,6 @@ def resetPassword(request):
         return JsonResponse({'code': 200, 'msg': '修改成功'})
 
 # 发送重置密码链接
-
-
 def sendResetPassword(request):
     if request.method == 'GET':
         return render(request, 'account/reset_pass.html', {'flag': True, 'tip': '请输入正确的邮箱地址（发送邮箱过程可能会有点长，请耐心等待）'})
@@ -308,8 +298,6 @@ def accountSet(request):
     return render(request, 'account/set.html')
 
 # 修改个人信息
-
-
 def setInfo(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -359,8 +347,6 @@ def getMessage(request):
     return render(request, 'account/message.html')
 
 # 获取信息
-
-
 def getMsg(request):
     if request.method == 'GET':
         message = notify.objects.filter(
@@ -383,8 +369,6 @@ def getMsg(request):
         return JsonResponse(context)
 
 # 删除信息
-
-
 def delMsg(request):
     if request.method == 'GET':
         notify_id = request.GET.get('id', None)
