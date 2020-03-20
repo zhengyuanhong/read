@@ -68,10 +68,12 @@
                 <i class="iconfont icon-pinglun1" title="回答"></i> {{i.comm_num}}
               </span>
             </div>
+            {% if i.category %}
             <div class="fly-list-badge">
               <span class="layui-badge-rim"><a href="?category={{i.category_id}}"
                   class='layui-this'>{{i.category}}</a></span>
             </div>
+            {% endif %}
           </li>
           {% endfor %}
 

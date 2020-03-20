@@ -49,7 +49,7 @@ def index(request):
                 str(i.createTime.strftime("%Y-%m-%d %H:%M:%S")))
             temp['comm_num'] = i.article.filter(is_show=True).count() 
             temp['is_top'] = i.is_top
-            temp['category'] = i.category.name if i.category else '综合'
+            temp['category'] = i.category.name if i.category else None 
             temp['category_id'] = i.category.id if i.category else 0
             article_data.append(temp)
 
