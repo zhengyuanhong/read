@@ -104,6 +104,7 @@
         </div>
       </div>
 
+      {% if request.user.is_authenticated %}
       <div class="fly-panel">
         <div class="fly-panel-title">
           创建书名（不可修改和删除）
@@ -120,6 +121,7 @@
           </form>
         </div>
       </div>
+      {% endif %}
 
       <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
         <h3 class="fly-panel-title">最近登陆</h3>
