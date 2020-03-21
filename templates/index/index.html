@@ -114,7 +114,7 @@
         <div class="fly-panel-main">
           <form class="layui-form">
             <div style="display: flex;">
-              <input id="input_val" type="text" value='' autocomplete="off" name="book_name" lay-verify="required"
+              <input id="input_val" type="text" maxlength="10" value='' autocomplete="off" name="book_name" lay-verify="required"
                 placeholder="输入名称" class="layui-input">
               <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
               <div style="width: 20px;"></div>
