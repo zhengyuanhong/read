@@ -228,6 +228,11 @@ def postReply(request):
         content = request.POST.get('content')
         contentlist = content.split(' ', 1)
 
+        from django.core.cache import cache
+        key = 'reply_user_id_{}'.format(request.user.id)
+        if cache.get(key):
+            return JsonResponse({'code': 202, 'msg': '你已经评论'})
+
         userinfo = siteUser.objects.filter(username=contentlist[0][1:]).first()
         if userinfo:
             content = '<a href="/account/u/{userid}">@{username}</a> {content}'.format(
@@ -252,6 +257,7 @@ def postReply(request):
         
         # 增加评论积分
         addJiFen(request, settings.ADD_REPLAY_JIFEN)
+        cache.set(key,True,10)
         return JsonResponse({'code': 200, 'msg': '评论成功','data':com_content})
 
 

@@ -32,7 +32,7 @@ layui.use(['jquery', 'form'], function () {
         if (res.code == 200) {
           layer.msg((res.msg));
           var value = res.data[0]
-           var reply_content = `<li data-id="${value.user.id}" class="jieda-daan">
+          var reply_content = `<li data-id="${value.user.id}" class="jieda-daan">
     <div class="detail-about detail-about-reply" >
       <a class="fly-avatar" href="/account/u/${value.user.id}">
         <img src="${value.user.avatar}" alt="${value.user.username}">
@@ -59,7 +59,6 @@ layui.use(['jquery', 'form'], function () {
       </div>
      </li>`
           $('#jieda').append(reply_content)
-          // window.location.reload();
         } else {
           layer.msg(res.msg);
         }
