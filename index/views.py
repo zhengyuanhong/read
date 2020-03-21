@@ -21,6 +21,7 @@ def index(request):
     if request.method == 'GET':
         category = int(request.GET.get('category', 0))
         page_id = request.GET.get('page', 1)
+        category_info = None
         if int(page_id) <= 0:
             page_id = 1
 
@@ -30,6 +31,7 @@ def index(request):
         else:
             art = article.objects.filter(category_id=category).filter(
                 is_show=True).all().order_by('-is_top', '-createTime')
+            category_info = cate.objects.filter(id=category).first()
 
         # 分页显示，把status 的数据按照3个一页显示
         paginator = Paginator(art, 20)
@@ -53,9 +55,11 @@ def index(request):
             temp['category_id'] = i.category.id if i.category else 0
             article_data.append(temp)
 
+
         context = {}
         context['article'] = article_data
         context['admin_article'] = getAdminArticle()
+        context['category_info'] = category_info 
         context['page'] = page
         context['user_login'] = siteUser.objects.all().order_by(
             '-last_login')[0:16]
@@ -126,22 +130,23 @@ def detail(request, article_id):
 @login_required
 def createCategory(request):
     if request.method == 'POST':
-        book_name = request.POST.get('book_name')
-        if not book_name:
+        note_name = request.POST.get('note_name')
+        desc = request.POST.get('desc','这位有点懒')
+        if not note_name:
             return JsonResponse({'code': 201, 'msg': '内容不能为空'})
 
-        exits = cate.objects.filter(name=book_name).exists()
+        exits = cate.objects.filter(name=note_name).exists()
         if exits:
             return JsonResponse({'code': 201, 'msg': '已经存在'})
 
-        name = cate.objects.create(name=book_name, create_user=request.user)
+        name = cate.objects.create(name=note_name, create_user=request.user,desc=desc)
         return JsonResponse({'code': 200, 'msg': '创建成功', 'data': [{'id': name.id, 'name': name.name}]})
 
 
 @login_required
 def postAdd(request):
     if request.method == 'GET':
-        category = cate.objects.all()
+        category = cate.objects.filter(create_user=request.user).all()
         return render(request, 'index/add.html', {'cate': category})
 
     if request.method == 'POST':
@@ -149,6 +154,10 @@ def postAdd(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
         article_type = int(request.POST.get('article_type', '0'))
+
+        if not request.user.is_superuser:
+            if not category:
+                return JsonResponse({'code': 201, 'msg': '先创建笔记本'})
 
         if not article_type:
             article_type = None
@@ -177,7 +186,7 @@ def editArticle(request):
 
         context = {}
         context['id'] = detail.id
-        context['category_name'] = detail.category.name if detail.category else 'MZ'
+        context['category_name'] = detail.category.name if detail.category else '管理员发布'
         context['category_id'] = detail.category.id if detail.category else None
         context['title'] = detail.title
         context['article_type'] = detail.article_type

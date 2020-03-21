@@ -75,13 +75,14 @@ class fineLink(models.Model):
 
 class category(models.Model):
     name = models.CharField('分类', max_length=20)
+    desc = models.CharField('描述', max_length=255,null=True,blank=True)
     create_user  = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='创建者')
     book_url = models.URLField('购买链接',null=True,blank=True)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = verbose_name = '所有书籍类目'
+        verbose_name_plural = verbose_name = '笔记分类'
 
     def __str__(self):
         return self.name

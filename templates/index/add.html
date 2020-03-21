@@ -18,7 +18,9 @@
                   <label class="layui-form-label">所在专栏</label>
                   <div class="layui-input-block">
                     <select lay-verify="required" name="category" lay-filter="column">
+                      {% if request.user.is_superuser %}
                       <option></option>
+                      {% endif %}
                       {% for i in cate %}
                       <option value="{{i.id}}">{{i.name}}</option>
                       {% endfor %}
