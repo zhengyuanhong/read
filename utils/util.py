@@ -12,20 +12,37 @@ from .qiniu import uploadQiniu
 def formateTime(str_time):
     timeArray = time.strptime(str_time, '%Y-%m-%d %H:%M:%S')
     before = int(time.mktime(timeArray))
+
+    time_str = "{} 23:59:59".format(time.strftime('%Y-%m-%d',time.localtime()))
+    # 今天最大的时间
+    today_last =time.mktime(time.strptime(time_str,'%Y-%m-%d %H:%M:%S'))
+
+    #当前时间
     now = time.time()
+    agoTimeTrue = now - before
+    agoTime = today_last - before
+    agoDay = (math.floor(agoTime/86400))
 
-    newTime = now - before
-
-    if newTime < 60 and newTime >= 0:
-        return '{}秒前'.format(str(round(newTime)))
-    elif newTime >= 60 and newTime < 3600:
-        return '{}分钟前'.format(str(round(newTime/60)))
-    elif newTime >= 3600 and newTime < 86400:
-        return '{}小时前'.format(str(round(newTime/3600)))
-    elif newTime >= 86400 and newTime < 604800:
-        return '{}天前'.format(str(round(newTime/86400)))
+    if agoTimeTrue < 60:
+        return '刚刚'
+    elif agoTimeTrue < 3600:
+        return '{}分钟前'.format(str(math.ceil(agoTimeTrue/60)))
+    elif agoTimeTrue < 3600*12:
+        return '{}小时前'.format(str(math.ceil(agoTimeTrue/3600)))
+    elif  agoDay == 0:
+        return '今天 {}'.format(time.strftime('%H:%M',time.localtime(before)))
+    elif  agoDay == 1:
+        return '昨天 {}'.format(time.strftime('%H:%M',time.localtime(before)))
+    elif  agoDay == 2:
+        return '前天 {}'.format(time.strftime('%H:%M',time.localtime(before)))
+    elif agoDay > 2 and agoDay < 16:
+        return '{num}前天 {time}'.format(num=agoDay,time=time.strftime('%H:%M',time.localtime(before)))
     else:
-        return '{}年{}月{}日'.format(timeArray.tm_year, timeArray.tm_mon, timeArray.tm_mday)
+        flag = True if time.localtime().tm_year != time.localtime(before).tm_year else False 
+        if flag:
+            return '{}年{}月{}日 {}:{}:{}'.format(timeArray.tm_year, timeArray.tm_mon, timeArray.tm_mday,timeArray.tm_hour,timeArray.tm_min,timeArray.tm_sec)
+        else:
+            return '{}月{}日 {}:{}:{}'.format(timeArray.tm_mon, timeArray.tm_mday,timeArray.tm_hour,timeArray.tm_min,timeArray.tm_sec)
 
 
 def get_token(userinfo):

@@ -114,6 +114,8 @@ def detail(request, article_id):
 
     context = {
         'detail': detail,
+        'article_create_time':formateTime(
+            str(detail.createTime.strftime("%Y-%m-%d %H:%M:%S"))),
         'author': author,
         'comm_num': comm_num,
         'data': data
