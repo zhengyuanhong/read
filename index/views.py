@@ -61,9 +61,9 @@ def index(request):
             '-last_login')[0:16]
         context['cate'] = cate.objects.all()
         context['fineurl'] = fineLink.objects.all()
-        # 查询 每本书名下的文章数量
-        context['hot'] = cate.objects.annotate(post_num=Count('article')).filter(
-            post_num__gt=0).order_by('-post_num')[0:10]
+        # 查询 每本分类下的文章数量
+        # context['hot'] = cate.objects.annotate(post_num=Count('article')).filter(
+        #     post_num__gt=0).order_by('-post_num')[0:10]
         return render(request, 'index/index.html', context)
 
 
@@ -177,7 +177,7 @@ def editArticle(request):
 
         context = {}
         context['id'] = detail.id
-        context['category_name'] = detail.category.name if detail.category else '综合'
+        context['category_name'] = detail.category.name if detail.category else 'MZ'
         context['category_id'] = detail.category.id if detail.category else None
         context['title'] = detail.title
         context['article_type'] = detail.article_type
