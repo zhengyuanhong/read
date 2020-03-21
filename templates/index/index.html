@@ -141,7 +141,7 @@
                 lay-verify="required" placeholder="输入名称" class="layui-input">
               <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
               <div style="height: 10px;"></div>
-              <textarea id='text_val' name="desc" placeholder="简单表述一下这个笔记本" class="layui-textarea"></textarea>
+              <textarea id='text_val' name="desc" maxlength="255" placeholder="简单表述一下这个笔记本" class="layui-textarea"></textarea>
               <div style="height: 10px;"></div>
               <button class="layui-btn layui-btn-green" lay-submit lay-filter="create">创建</button>
             </div>
