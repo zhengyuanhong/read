@@ -231,7 +231,7 @@ def postReply(request):
         from django.core.cache import cache
         key = 'reply_user_id_{}'.format(request.user.id)
         if cache.get(key):
-            return JsonResponse({'code': 202, 'msg': '你已经评论'})
+            return JsonResponse({'code': 201, 'msg': '你手速太快了，慢点'})
 
         userinfo = siteUser.objects.filter(username=contentlist[0][1:]).first()
         if userinfo:
