@@ -62,9 +62,6 @@
                 <a href="/account/u/{{m.user.id}}" class="fly-link">
                   <cite>{{m.user.username}}</cite>
                 </a>
-                {% if m.user.id == author.id %}
-                <span>(作者)</span>
-                {% endif %}
               </div>
 
               <div class="detail-hits">
@@ -98,7 +95,7 @@
               </div>
             </div>
             <div class="layui-form-item">
-              <input type="hidden" name="aid" value="{{detail.id}}">
+              <input id="article_id" type="hidden" name="aid" value="{{detail.id}}">
               <button class="layui-btn" lay-filter="reply" lay-submit>提交回复</button>
             </div>
           </form>

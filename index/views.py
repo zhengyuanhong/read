@@ -121,7 +121,6 @@ def detail(request, article_id):
 
     return render(request, 'index/detail.html', context)
 
-
 @login_required
 def createCategory(request):
     if request.method == 'POST':
@@ -237,12 +236,23 @@ def postReply(request):
             if request.user.id == userinfo.id:
                 return JsonResponse({'code': 201, 'msg': '不能给自己评论'})
 
-        comments.objects.create(
+        com_info = comments.objects.create(
             aid_id=aid, comm_uid_id=request.user.id, to_comm_uid_id=userinfo.id if userinfo else None, comm_content=content)
 
+        com_content = [{
+            'comm_content':com_info.comm_content,
+            'comm_time' :formateTime(
+                str(com_info.createTime.strftime("%Y-%m-%d %H:%M:%S"))),
+            'user':{
+                'id':com_info.comm_uid.id,
+                'avatar':com_info.comm_uid.avatar,
+                'username':com_info.comm_uid.username
+            }
+        }]
+        
         # 增加评论积分
         addJiFen(request, settings.ADD_REPLAY_JIFEN)
-        return JsonResponse({'code': 200, 'msg': '评论成功'})
+        return JsonResponse({'code': 200, 'msg': '评论成功','data':com_content})
 
 
 @login_required

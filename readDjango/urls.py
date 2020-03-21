@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from index.views import index, getUserLogin, detail, \
     postAdd, uploadImage, postReply, editArticle,\
-    deleteArticle, index_page_not_found, createCategory
+    deleteArticle, index_page_not_found, createCategory \
 
 urlpatterns = [
     path('read_admin/', admin.site.urls),
