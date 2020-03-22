@@ -67,6 +67,17 @@ def get_random_str():
     md5.update(uuid_str)
     return md5.hexdigest()
 
+def random_desc():
+    arr = [
+        '这万束阳光落下，都照向你，这千百人来回，都与我擦肩。',
+        '商人重利轻别离，前月浮梁买茶去。去来江口空守船，绕船明月江水寒。',
+        '曾爱惜的总要放手，难接手的又来等候',
+        '你是我生命中唯一的阳光，可是这束阳光，却不唯一照耀我。',
+        '不想再难过，丢弃回忆重新来过。让涐永远牵着你，把手给我'
+    ]
+    random = Random()
+    index = random.randint(0,len(arr)-1)
+    return arr[index]
 
 def sendMail(subject, email_msg, reciever, html_message=None):
     send_mail(

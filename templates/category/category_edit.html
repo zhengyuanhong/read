@@ -1,0 +1,37 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block right_content %}
+<div class="layui-container fly-marginTop">
+    <div class="fly-panel" pad20 style="padding-top: 5px;">
+        <div class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief" lay-filter="user">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">编辑</li>
+                </ul>
+                <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form">
+                            <div>
+                                <input id="input_val" type="text" maxlength="15" value='{{note.name}}'
+                                    autocomplete="off" name="note_name" lay-verify="required" placeholder="输入名称"
+                                    class="layui-input">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                                <input type="hidden" name="note_id" value="{{note.id}}" />
+                                <div style="height: 10px;"></div>
+                                <textarea id='text_val' name="desc" maxlength="255" placeholder="简单表述一下这个笔记本"
+                                    class="layui-textarea">{{note.desc}}</textarea>
+                                <div style="height: 10px;"></div>
+                                <button class="layui-btn layui-btn-green" lay-submit lay-filter="edit">更新</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'index/js/category.js' %}"></script>
+{% endblock%}

@@ -135,14 +135,14 @@
         </div>
       </div>
 
-      {% if detail.category.book_url %}
+      {% if detail.category.ad_url %}
       <div class="fly-panel">
         <div class="fly-panel-title">
-          推荐
+          推荐购买
         </div>
         <div class="fly-panel-main">
-          <a href="{{detail.category.book_url}}" target="_blank" class="fly-zanzhu" time-limit="2017.09.25-2099.01.01"
-            style="background-color: #009688; background-image: linear-gradient(to right,#009688,#5FB878);">《{{detail.category.name}}》</a>
+          <a href="{{detail.category.ad_url}}" target="_blank" class="fly-zanzhu" time-limit="2017.09.25-2099.01.01"
+            style="background-color: #009688; background-image: linear-gradient(to right,#009688,#5FB878);">{{detail.category.ad_name}}</a>
         </div>
       </div>
       {% endif %}

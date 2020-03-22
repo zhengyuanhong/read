@@ -34,6 +34,8 @@ urlpatterns = [
     path('upload', uploadImage, name='uploadImage'),
     path('account/', include('account.urls')),
     path('user-login', getUserLogin),
+    path('note-list',account.views.noteList,name='noteList'),
+    path('edit-note',account.views.editNote,name='editNote'),
     re_path(r'^media/(?P<path>.*)$', serve,
             {'document_root': settings.MEDIA_ROOT})
 ]

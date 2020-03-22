@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import siteUser
-from index.models import article, comments, notify
+from index.models import article, comments, notify, category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse, HttpResponseRedirect
@@ -8,9 +8,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from utils.qiniu import uploadQiniu
-from utils.util import get_token, de_token, formateTime, random_str, uploadImg
+from utils.util import get_token, de_token, formateTime, random_str, uploadImg,random_desc
 from celery_task.task import sendMail, sendResetPassUrl, regNotfiy
 from django.core.cache import cache
+from django.core.paginator import Paginator
 import os
 import math
 import time
@@ -248,6 +249,8 @@ def setPassword(request):
             return JsonResponse({'code': 200, 'msg': '修改成功'})
 
 # 重置密码
+
+
 def resetPassword(request):
     if request.method == 'GET':
         token = request.GET.get('token')
@@ -398,3 +401,41 @@ def delMsg(request):
         else:
             notify.objects.filter(uid=request.user).update(is_read=1)
         return render(request, 'account/message.html')
+
+# 获取用户的所有笔记
+
+
+def noteList(request):
+    if request.method == 'GET':
+        page_id = request.GET.get('page', 1)
+        user_id = request.GET.get('user_id', request.user.id)
+        userInfo = siteUser.objects.get(id=user_id)
+        note = userInfo.category_set.all().order_by('-createTime')
+        # 分页显示，把status 的数据按照3个一页显示
+        paginator = Paginator(note, 8)
+        # 获取第一页的内容
+        note_list = paginator.page(page_id)
+        context = {}
+        context['user'] = userInfo
+        context['note_list'] = note_list
+        return render(request, 'category/category_list.html', context)
+
+
+@login_required
+def editNote(request):
+    if request.method == 'GET':
+        note_id = request.GET.get('note_id')
+        note = category.objects.filter(id=note_id).first()
+        return render(request, 'category/category_edit.html', {'note': note})
+
+    if request.method == 'POST':
+        note_id = request.POST.get('note_id')
+        note_name = request.POST.get('note_name')
+        desc = request.POST.get('desc', '这位有点懒')
+        if not note_name:
+            return JsonResponse({'code': 201, 'msg': '内容不能为空'})
+
+        if not desc:
+            desc = random_desc()
+        category.objects.filter(id=note_id).update(name=note_name, desc=desc)
+        return JsonResponse({'code': 200, 'msg': '修改成功'}) 

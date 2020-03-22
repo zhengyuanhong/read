@@ -74,10 +74,12 @@ class fineLink(models.Model):
 
 
 class category(models.Model):
-    name = models.CharField('分类', max_length=20)
+    name = models.CharField('笔记名称', max_length=20)
     desc = models.TextField('描述',null=True,blank=True)
     create_user  = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='创建者')
-    book_url = models.URLField('购买链接',null=True,blank=True)
+    book_url = models.URLField('封面链接',null=True,blank=True)
+    ad_url = models.URLField('封面广告图片链接',null=True,blank=True)
+    ad_name = models.URLField('广告标语',null=True,blank=True)
     updateTime = models.DateTimeField('更新时间', auto_now=True)
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
 

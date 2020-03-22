@@ -13,7 +13,7 @@ layui.use(['form', 'jquery', 'layer'], function () {
       success: function (res) {
         if (res.code == 200) {
           layer.msg((res.msg));
-          var str = "<dd><a href='?category=" + res.data[0].id + "'>" + res.data[0].name + "</a><dd>"
+          var str = "<dd><a href='?note=" + res.data[0].id + "'>" + res.data[0].name + "</a><dd>"
           book_list.append(str)
           $('#input_val').val('')
           $('#text_val').val('')

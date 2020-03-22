@@ -6,7 +6,7 @@ from account.models import siteUser
 from django.core.paginator import Paginator
 from .models import article, comments, category as cate, notify, fineLink
 from django.contrib.auth.decorators import login_required
-from utils.util import addJiFen, reduceJiFen, formateTime, getlevel
+from utils.util import addJiFen, reduceJiFen, formateTime, getlevel,random_desc
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.db.models import Count
@@ -139,9 +139,11 @@ def createCategory(request):
         if exits:
             return JsonResponse({'code': 201, 'msg': '已经存在'})
 
+        if not desc:
+            desc = random_desc()
+
         name = cate.objects.create(name=note_name, create_user=request.user,desc=desc)
         return JsonResponse({'code': 200, 'msg': '创建成功', 'data': [{'id': name.id, 'name': name.name}]})
-
 
 @login_required
 def postAdd(request):
