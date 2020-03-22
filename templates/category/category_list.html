@@ -1,0 +1,72 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block userInfo %}
+<div id="user_id" data="{{user.id}}" class="fly-home fly-panel" style="background-image: url();">
+  <img src="{{user.avatar}}" alt="{{user.username}}">
+  <h1>
+    {{user.username}}
+    {% if user.sex == 'male' %}
+    <i class="iconfont icon-nan"></i>
+    {% else %}
+    <i class="iconfont icon-nv"></i>
+    {% endif %}
+
+    {% if user.is_staff %}
+    <span>（管理员）</span>
+    {% endif %}
+  </h1>
+
+  <p class="fly-home-info">
+    <span style="color: #FF7200;">财富 {{user.jifen}}</span>
+    <i class="iconfont icon-shijian"></i><span>{{user.date_joined}} 加入</span>
+  </p>
+  <p class="fly-home-sign">{{user.qianming}}</p>
+</div>
+
+
+{% endblock %}
+{% block right_content %}
+<div class="fly-main" style="overflow: hidden;">
+  <ul class="fly-case-list">
+    {% for n in note_list %}
+    <li data-id="123">
+      <a class="fly-case-img" href="/?note={{n.id}}">
+        <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="Fly社区">
+        <cite class="layui-btn layui-btn-primary layui-btn-small">去看看</cite>
+      </a>
+      <h2><a href="/?note={{n.id}}">《{{n.name}}》</a></h2>
+      <p class="fly-case-desc"><b>描述：</b>{{n.desc}}</p>
+      <div style="font-size: 20px;">
+        <span class="layui-elip" style="font-size: 12px;">{{n.createTime}} 创建</span>
+        <!-- <p><text style="font-size: 10px;">*删除该笔记本后，内容不会删除</text></p> -->
+      </div>
+      
+      {% if user.id == request.user.id %}
+      <div style="display:flex;justify-content: center;margin-top: 10px;" >
+        <a href="/edit-note?note_id={{n.id}}" style="margin-left: 10px;" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">编辑</a>
+        <!-- <a href='/delete-note?note_id={{n.id}}' style="margin-left: 10px;" class="layui-btn layui-btn-danger" data-type="addFriend">删除</a> -->
+      </div>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% if not note_list %}
+  <p style="text-align: center;">暂无笔记</p>
+  {% endif %}
+  <div style="text-align: center">
+    <div style="padding: 20px 0; font-size: 17px;">
+      {% if note_list.has_previous %}
+      <a href="/note-list?user_id={{user.id}}&page={{ note_list.previous_page_number }}">上一页</a>
+      {% endif %}
+
+      {% if note_list.has_next %}
+      <a class="laypage-next" href="/note-list?user_id={{user.id}}&page={{ note_list.next_page_number }}">下一页</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<script></script>
+{% endblock%}

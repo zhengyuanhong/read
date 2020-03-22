@@ -22,5 +22,5 @@ urlpatterns = [
     path('u/article',accountUserArticle,name='accountUserArticle'),
     path('u/comment',accountUserComment,name='accountUserComment'),
     path('forget',sendResetPassword,name='sendResetPassword'),
-    path('reset_password',resetPassword,name='resetPassword')
+    path('reset_password',resetPassword,name='resetPassword'),
 ]

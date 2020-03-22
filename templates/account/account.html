@@ -23,8 +23,13 @@
 
   <p class="fly-home-sign">{{user.qianming}}</p>
   {% if user.id == request.user.id %}
-  <a href="{% url 'postAdd' %}" style="margin-top: 15px;" class="layui-btn layui-btn-primary fly-imActive"
-    data-type="addFriend">写笔记</a>
+  <div class="fly-sns">
+    <a href="{% url 'postAdd' %}" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">写笔记</a>
+    <a href="/note-list?user_id={{user.id}}" class="layui-btn layui-btn-green" data-type="chat">我的笔记</a>
+  </div>
+  {% else %}
+  <a href="/note-list?user_id={{user.id}}" style="margin-top: 15px;" class="layui-btn layui-btn-primary"
+    data-type="addFriend">ta的笔记</a>
   {% endif %}
 </div>
 
