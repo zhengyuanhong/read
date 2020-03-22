@@ -141,8 +141,9 @@ def createCategory(request):
 
         if not desc:
             desc = random_desc()
+        from utils.util import random_note_url
 
-        name = cate.objects.create(name=note_name, create_user=request.user,desc=desc)
+        name = cate.objects.create(name=note_name,book_url=random_note_url(),create_user=request.user,desc=desc)
         return JsonResponse({'code': 200, 'msg': '创建成功', 'data': [{'id': name.id, 'name': name.name}]})
 
 @login_required

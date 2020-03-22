@@ -6,18 +6,27 @@ import uuid
 import hashlib
 import time
 import datetime
-import os,math
+import os
+import math
 from .qiniu import uploadQiniu
+from django.conf import settings
+
+
+def random_note_url():
+    random = Random()
+    return '{}/static/note/{}.jpg'.format(settings.HOST_URL, random.randint(1, 11))
+
 
 def formateTime(str_time):
     timeArray = time.strptime(str_time, '%Y-%m-%d %H:%M:%S')
     before = int(time.mktime(timeArray))
 
-    time_str = "{} 23:59:59".format(time.strftime('%Y-%m-%d',time.localtime()))
+    time_str = "{} 23:59:59".format(
+        time.strftime('%Y-%m-%d', time.localtime()))
     # 今天最大的时间
-    today_last =time.mktime(time.strptime(time_str,'%Y-%m-%d %H:%M:%S'))
+    today_last = time.mktime(time.strptime(time_str, '%Y-%m-%d %H:%M:%S'))
 
-    #当前时间
+    # 当前时间
     now = time.time()
     agoTimeTrue = now - before
     agoTime = today_last - before
@@ -29,20 +38,20 @@ def formateTime(str_time):
         return '{}分钟前'.format(str(math.ceil(agoTimeTrue/60)))
     elif agoTimeTrue < 3600*12:
         return '{}小时前'.format(str(math.ceil(agoTimeTrue/3600)))
-    elif  agoDay == 0:
-        return '今天 {}'.format(time.strftime('%H:%M',time.localtime(before)))
-    elif  agoDay == 1:
-        return '昨天 {}'.format(time.strftime('%H:%M',time.localtime(before)))
-    elif  agoDay == 2:
-        return '前天 {}'.format(time.strftime('%H:%M',time.localtime(before)))
+    elif agoDay == 0:
+        return '今天 {}'.format(time.strftime('%H:%M', time.localtime(before)))
+    elif agoDay == 1:
+        return '昨天 {}'.format(time.strftime('%H:%M', time.localtime(before)))
+    elif agoDay == 2:
+        return '前天 {}'.format(time.strftime('%H:%M', time.localtime(before)))
     elif agoDay > 2 and agoDay < 16:
-        return '{num}前天 {time}'.format(num=agoDay,time=time.strftime('%H:%M',time.localtime(before)))
+        return '{num}前天 {time}'.format(num=agoDay, time=time.strftime('%H:%M', time.localtime(before)))
     else:
-        flag = True if time.localtime().tm_year != time.localtime(before).tm_year else False 
+        flag = True if time.localtime().tm_year != time.localtime(before).tm_year else False
         if flag:
-            return '{}年{}月{}日 {}:{}:{}'.format(timeArray.tm_year, timeArray.tm_mon, timeArray.tm_mday,timeArray.tm_hour,timeArray.tm_min,timeArray.tm_sec)
+            return '{}年{}月{}日 {}:{}:{}'.format(timeArray.tm_year, timeArray.tm_mon, timeArray.tm_mday, timeArray.tm_hour, timeArray.tm_min, timeArray.tm_sec)
         else:
-            return '{}月{}日 {}:{}:{}'.format(timeArray.tm_mon, timeArray.tm_mday,timeArray.tm_hour,timeArray.tm_min,timeArray.tm_sec)
+            return '{}月{}日 {}:{}:{}'.format(timeArray.tm_mon, timeArray.tm_mday, timeArray.tm_hour, timeArray.tm_min, timeArray.tm_sec)
 
 
 def get_token(userinfo):
@@ -67,6 +76,7 @@ def get_random_str():
     md5.update(uuid_str)
     return md5.hexdigest()
 
+
 def random_desc():
     arr = [
         '这万束阳光落下，都照向你，这千百人来回，都与我擦肩。',
@@ -76,8 +86,9 @@ def random_desc():
         '不想再难过，丢弃回忆重新来过。让涐永远牵着你，把手给我'
     ]
     random = Random()
-    index = random.randint(0,len(arr)-1)
+    index = random.randint(0, len(arr)-1)
     return arr[index]
+
 
 def sendMail(subject, email_msg, reciever, html_message=None):
     send_mail(
@@ -187,7 +198,7 @@ def uploadImg(request, types):
     res = uploadQiniu(filepath, savename)
     if res['key'] != savename:
         # return JsonResponse({'code': 201, 'msg': '上传失败', 'res': res})
-        return 2 
+        return 2
 
     return savename
 

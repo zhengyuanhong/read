@@ -32,7 +32,9 @@
     {% for n in note_list %}
     <li data-id="123">
       <a class="fly-case-img" href="/?note={{n.id}}">
-        <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="Fly社区">
+        {% if n.book_url %}
+        <img src="{{n.book_url}}" alt="蔓枝阅读笔记">
+        {% endif %}
         <cite class="layui-btn layui-btn-primary layui-btn-small">去看看</cite>
       </a>
       <h2><a href="/?note={{n.id}}">《{{n.name}}》</a></h2>
