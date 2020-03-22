@@ -49,9 +49,9 @@ def formateTime(str_time):
     else:
         flag = True if time.localtime().tm_year != time.localtime(before).tm_year else False
         if flag:
-            return '{}年{}月{}日 {}:{}:{}'.format(timeArray.tm_year, timeArray.tm_mon, timeArray.tm_mday, timeArray.tm_hour, timeArray.tm_min, timeArray.tm_sec)
+            return '{}年{}月{}日 {}:{}'.format(timeArray.tm_year, timeArray.tm_mon, timeArray.tm_mday, timeArray.tm_hour, timeArray.tm_min)
         else:
-            return '{}月{}日 {}:{}:{}'.format(timeArray.tm_mon, timeArray.tm_mday, timeArray.tm_hour, timeArray.tm_min, timeArray.tm_sec)
+            return '{}月{}日 {}:{}'.format(timeArray.tm_mon, timeArray.tm_mday, timeArray.tm_hour, timeArray.tm_min)
 
 
 def get_token(userinfo):
