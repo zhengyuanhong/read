@@ -19,7 +19,7 @@ def index_page_not_found(request):
 
 def index(request):
     if request.method == 'GET':
-        category = int(request.GET.get('category', 0))
+        category = int(request.GET.get('note', 0))
         page_id = request.GET.get('page', 1)
         category_info = None
         if int(page_id) <= 0:

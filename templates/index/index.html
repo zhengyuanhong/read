@@ -93,7 +93,7 @@
             </div>
             {% if i.category %}
             <div class="fly-list-badge">
-              <span class="layui-badge-rim"><a href="?category={{i.category_id}}"
+              <span class="layui-badge-rim"><a href="?note={{i.category_id}}"
                   class='layui-this'>{{i.category}}</a></span>
             </div>
             {% endif %}
@@ -164,7 +164,7 @@
         <dl id="book_list" class="fly-panel-main">
           <dd><a href="/">所有笔记</a></dd>
           {% for i in cate %}
-          <dd><a href="?category={{i.id}}">{{i.name}}</a>
+          <dd><a href="?note={{i.id}}">{{i.name}}</a>
           <dd>
             {% endfor %}
         </dl>
