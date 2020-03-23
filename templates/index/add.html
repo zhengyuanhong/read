@@ -19,7 +19,7 @@
                   <div class="layui-input-block">
                     <select lay-verify="required" name="category" lay-filter="column">
                       {% if request.user.is_superuser %}
-                      <option></option>
+                      <option value >管理员发布</option>
                       {% endif %}
                       {% for i in cate %}
                       <option value="{{i.id}}">{{i.name}}</option>

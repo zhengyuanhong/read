@@ -173,6 +173,7 @@ def postAdd(request):
 
         article.objects.create(
             category_id=category, title=title, content=content, uid=request.user, article_type=article_type)
+
         # 发布文章增加5个积分
         addJiFen(request, settings.ADD_JIFEN)
 
