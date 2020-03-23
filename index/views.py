@@ -185,7 +185,7 @@ def editArticle(request):
         detail = article.objects.filter(
             id=request.GET.get('aid'), uid_id=request.user.id).first()
 
-        article_type_list = {'普通': 0, '公告': 1, '通知': 2, '讨论': 3}
+        article_type_list = {'普通': None, '公告': 1, '通知': 2, '讨论': 3}
 
         context = {}
         context['id'] = detail.id
