@@ -185,12 +185,12 @@ def editArticle(request):
         detail = article.objects.filter(
             id=request.GET.get('aid'), uid_id=request.user.id).first()
 
-        article_type_list = {'普通': None, '公告': 1, '通知': 2, '讨论': 3}
+        article_type_list = {'普通': 0, '公告': 1, '通知': 2, '讨论': 3}
 
         context = {}
         context['id'] = detail.id
         context['category_name'] = detail.category.name if detail.category else '管理员发布'
-        context['category_id'] = detail.category.id if detail.category else None
+        context['category_id'] = detail.category.id if detail.category else 0
         context['title'] = detail.title
         context['article_type'] = detail.article_type
         context['article_type_list'] = article_type_list
