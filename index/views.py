@@ -61,8 +61,8 @@ def index(request):
         context['admin_article'] = getAdminArticle()
         context['category_info'] = category_info 
         context['page'] = page
-        context['user_login'] = siteUser.objects.filter(is_superuser=False).all().order_by(
-            '-last_login')[0:16]
+        # context['user_login'] = siteUser.objects.filter(is_superuser=False).all().order_by(
+        #     '-last_login')[0:16]
         context['cate'] = cate.objects.all()
         context['fineurl'] = fineLink.objects.all()
         # 查询 每本分类下的文章数量
