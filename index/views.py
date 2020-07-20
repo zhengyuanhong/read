@@ -12,7 +12,6 @@ import datetime
 from django.db.models import Count
 # Create your views here.
 
-
 def index_page_not_found(request):
     return render(request, '404.html')
 
