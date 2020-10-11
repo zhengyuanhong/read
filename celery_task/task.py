@@ -3,6 +3,15 @@ from readDjango import settings
 from django.core.mail import send_mail
 
 
+import time
+@app.task
+def testfun():
+    while True:
+        with open('test.txt','a') as f:
+            f.write('{}\n'.format(time.time()))
+            time.sleep(2)
+
+
 @app.task
 def regNotfiy(username, email):
     subject = settings.WEB_NAME+'注册通知'
