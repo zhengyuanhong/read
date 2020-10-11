@@ -15,9 +15,8 @@ app = Celery('celery_task',
 
 app.conf.beat_schedule = {
     "each1m_task": {
-        "task": "celery_task.task.regNotify",
+        "task": "celery_task.task.testfun",
         "schedule": crontab(minute=1),  # 每1分钟执行一次 也可以替换成 60  即  "schedule": 60
-        'args':('test','ddd')
     }
 }
 
