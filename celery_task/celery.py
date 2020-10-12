@@ -15,11 +15,11 @@ app = Celery('celery_task',
 
 
 app.conf.timezone = "Asia/Shanghai"
-
+app.conf.enable_utc = False
 app.conf.beat_schedule = {
     "each1m_task": {
         "task": "celery_task.task.regNotfiy",
-        "schedule": crontab(minute=1),  # 每1分钟执行一次 也可以替换成 60  即  "schedule": 60
+        "schedule": crontab(),  # 每1分钟执行一次 也可以替换成 60  即  "schedule": 60
         'args':('ceshi','deshi')
     }
 }
