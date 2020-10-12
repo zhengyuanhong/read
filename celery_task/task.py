@@ -13,9 +13,9 @@ def tip():
     for u in users:
         isPush = article.objects.filter(uid=u.id).filter(createTime__year=nowDate.year,createTime__month=nowDate.month,createTime__day=nowDate.day).exists()
         if isPush:
-           remind() 
+           remind.delay() 
 
-
+@app.task
 def remind():
     subject = '事项提醒'
     message = ''
