@@ -1,12 +1,40 @@
 from celery_task.celery import app
 from readDjango import settings
 from django.core.mail import send_mail
-
+from account.models import siteUser
+from index.models import article
+import datetime
 
 import time
 @app.task
-def test(a,b):
-    print(a,b)
+def tip():
+    nowDate = datetime.datetime.now().date()
+    users = siteUser.objects.filter(is_verif=True).all()
+    for u in users:
+        isPush = article.objects.filter(uid=u.id).filter(createTime__year=nowDate.year,createTime__month=nowDate.month,createTime__day=nowDate.day).exists()
+        if isPush:
+           remind() 
+
+
+def remind():
+    subject = '事项提醒'
+    message = ''
+
+    html_template = '''
+        今天没有你完成任务【蔓枝阅读笔记】
+      '''
+
+    # html_message = html_template.format(username=username, email=email)
+
+    email_list = [settings.EMAIL_HOST_USER]
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=email_list,
+        html_message=html_template
+    )
 
 @app.task
 def regNotfiy(username, email):
