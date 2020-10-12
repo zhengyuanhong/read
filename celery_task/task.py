@@ -10,14 +10,17 @@ import time
 
 @app.task
 def remind():
-    subject = '事项提醒'
+    subject = '网站统计'
     message = ''
 
     html_template = '''
-        今天没有你完成任务【蔓枝阅读笔记】
+        用户量:{user_count}人
+        文章总数:{article_count}篇
       '''
 
-    # html_message = html_template.format(username=username, email=email)
+    user_count = siteUser.objects.filter(is_verif=True).count()
+    article_count = article.objects.count()
+    html_message = html_template.format(user_count=user_count,article_count=article_count)
 
     email_list = [settings.EMAIL_HOST_USER]
 
@@ -26,13 +29,13 @@ def remind():
         message=message,
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=email_list,
-        html_message=html_template
+        html_message=html_message
     )
 
 @app.task
 def tip():
     nowDate = datetime.datetime.now().date()
-    users = siteUser.objects.filter(is_verif=True).all()
+    users = siteUser.objects.filter(is_verif=True).count()
     for u in users:
         isPush = article.objects.filter(uid=u.id).filter(createTime__year=nowDate.year,createTime__month=nowDate.month,createTime__day=nowDate.day).exists()
         if isPush:

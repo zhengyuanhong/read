@@ -20,7 +20,7 @@ app.conf.enable_utc = False
 app.conf.beat_schedule = {
     "each1m_task": {
         "task": "celery_task.task.remind",
-        "schedule": crontab(minute=30,hour=23),  # 每1分钟执行一次 也可以替换成 60  即  "schedule": 60
+        "schedule": crontab(minute=0,hour=0),  # 每1分钟执行一次 也可以替换成 60  即  "schedule": 60
     }
 }
 
