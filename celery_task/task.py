@@ -6,14 +6,7 @@ from index.models import article
 import datetime
 
 import time
-@app.task
-def tip():
-    nowDate = datetime.datetime.now().date()
-    users = siteUser.objects.filter(is_verif=True).all()
-    for u in users:
-        isPush = article.objects.filter(uid=u.id).filter(createTime__year=nowDate.year,createTime__month=nowDate.month,createTime__day=nowDate.day).exists()
-        if isPush:
-           remind.delay() 
+
 
 @app.task
 def remind():
@@ -35,6 +28,16 @@ def remind():
         recipient_list=email_list,
         html_message=html_template
     )
+
+@app.task
+def tip():
+    nowDate = datetime.datetime.now().date()
+    users = siteUser.objects.filter(is_verif=True).all()
+    for u in users:
+        isPush = article.objects.filter(uid=u.id).filter(createTime__year=nowDate.year,createTime__month=nowDate.month,createTime__day=nowDate.day).exists()
+        if isPush:
+           remind.delay() 
+
 
 @app.task
 def regNotfiy(username, email):
