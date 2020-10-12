@@ -1,5 +1,6 @@
 from __future__ import absolute_import
-from celery import Celery,schedules
+from celery import Celery
+from celery.schedules import crontab 
 import os,django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "readDjango.settings")
 django.setup()
@@ -15,7 +16,7 @@ app = Celery('celery_task',
 app.conf.beat_schedule = {
     "each1m_task": {
         "task": "celery_task.task.test",
-        "schedule": schedules.crontab(minute=1),  # 每1分钟执行一次 也可以替换成 60  即  "schedule": 60
+        "schedule": 10,  # 每1分钟执行一次 也可以替换成 60  即  "schedule": 60
         'args':('ceshi','deshi')
     }
 }
